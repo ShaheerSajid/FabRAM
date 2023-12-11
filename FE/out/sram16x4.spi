@@ -1,0 +1,298 @@
+.title sram_gen
+.subckt bit_cell VDD VSS WL BL BL_
+X0 Q Q_ VSS VSS sky130_fd_pr__nfet_01v8 l=0.15U w=0.80U
+X1 Q_ Q VSS VSS sky130_fd_pr__nfet_01v8 l=0.15U w=0.80U
+X2 Q Q_ VDD VDD sky130_fd_pr__pfet_01v8 l=0.15U w=0.42U
+X3 Q_ Q VDD VDD sky130_fd_pr__pfet_01v8 l=0.15U w=0.42U
+X4 Q WL BL VSS sky130_fd_pr__nfet_01v8 l=0.15U w=0.60U
+X5 Q_ WL BL_ VSS sky130_fd_pr__nfet_01v8 l=0.15U w=0.60U
+.ends bit_cell
+
+.subckt in_reg VDD VSS clk D Q
+X0 net3 clk VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X1 net4 net2 net5 VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X2 net55 Q VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=420n
+X3 net2 net3 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X4 Q net5 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X5 Din net3 net1 VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X6 net11 net4 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=420n
+X7 net4 net1 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X8 net3 clk VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X9 Q net5 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X10 Din net2 net1 VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X11 net2 net3 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X12 net11 net4 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=420n
+X13 net55 Q VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=420n
+X14 net4 net1 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X15 net4 net3 net5 VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X16 net11 net2 net1 VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X17 net11 net3 net1 VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X18 net55 net3 net5 VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X19 net55 net2 net5 VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X20 D_ D VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=420n
+X21 D_ D VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=420n
+X22 Din D_ VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X23 Din D_ VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+.ends in_reg
+
+.subckt se_cell VDD VSS SAEN BL BL_ SB
+X0 net1 SAEN VSS VSS sky130_fd_pr__nfet_01v8 l=0.15u w=0.8u
+X1 diff1 BL_ net1 net1 sky130_fd_pr__nfet_01v8 l=0.15U w=0.42U
+X2 diff2 BL net1 net1 sky130_fd_pr__nfet_01v8 l=0.15U w=0.42U
+X3 diff1 diff1 VDD VDD sky130_fd_pr__pfet_01v8 l=0.15U w=0.42U
+X4 diff2 diff1 VDD VDD sky130_fd_pr__pfet_01v8 l=0.15U w=0.42U
+X5 diff2_ diff2 VDD VDD sky130_fd_pr__pfet_01v8 l=0.15U w=0.8U
+X6 diff2_ diff2 VSS VSS sky130_fd_pr__nfet_01v8 l=0.15U w=0.42U
+X7 SB_ diff2_ VDD VDD sky130_fd_pr__pfet_01v8 l=0.15U w=1.6U
+X8 SB_ diff2_ VSS VSS sky130_fd_pr__nfet_01v8 l=0.15U w=1.6U
+X9 SB_w Q_ VSS VSS sky130_fd_pr__nfet_01v8 l=0.15U w=0.80U
+X10 Q_ SB_w VSS VSS sky130_fd_pr__nfet_01v8 l=0.15U w=0.80U
+X11 SB_w Q_ VDD VDD sky130_fd_pr__pfet_01v8 l=0.15U w=0.42U
+X12 Q_ SB_w VDD VDD sky130_fd_pr__pfet_01v8 l=0.15U w=0.42U
+X13 SB_w SAEN SB_ VSS sky130_fd_pr__nfet_01v8 l=0.15U w=0.60U
+X14 Q_ SAEN diff2_ VSS sky130_fd_pr__nfet_01v8 l=0.15U w=0.60U
+X15 SB SB_w VDD VDD sky130_fd_pr__pfet_01v8 l=0.15U w=1.6U
+X16 SB SB_w VSS VSS sky130_fd_pr__nfet_01v8 l=0.15U w=1.6U
+.ends se_cell
+
+.subckt not VDD VSS A B
+X0 B A VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X1 B A VSS VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+.ends not
+
+.subckt notdel VDD VSS A B
+X0 B A VDD VDD sky130_fd_pr__pfet_01v8 l=5e-07 w=8.4e-07
+X1 B A VSS VSS sky130_fd_pr__nfet_01v8 l=5e-07 w=4.2e-07
+.ends notdel
+
+.subckt nand2 VDD VSS A B Y
+X0 Y A VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X1 Y B VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X2 Y B net1 VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+X3 net1 A VSS VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+.ends nand2
+
+.subckt nand3 VDD VSS A B C Y
+X0 Y A VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X1 Y B VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X2 Y C VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X3 Y A net1 VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+X4 net1 B net2 VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+X5 net2 C VSS VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+.ends nand3
+
+.subckt nand4 VDD VSS A B C Y
+X0 Y A VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X1 Y B VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X2 Y C VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X3 Y D VDD VDD sky130_fd_pr__pfet_01v8 l=1.5e-07 w=4.2e-07
+X4 Y D net1 VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+X5 net1 B net2 VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+X6 net2 C net3 VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+X7 net3 A VSS VSS sky130_fd_pr__nfet_01v8 l=1.5e-07 w=4.2e-07
+.ends nand4
+
+.subckt dec_2to4 VDD VSS A1 A0 Y0 Y1 Y2 Y3
+X0 VDD VSS A1 A_1 not
+X1 VDD VSS A0 A_0 not
+X2 VDD VSS A_1 A_0 Y0_ nand2
+X3 VDD VSS A_1 A0 Y1_ nand2
+X4 VDD VSS A1 A_0 Y2_ nand2
+X5 VDD VSS A1 A0 Y3_ nand2
+X6 VDD VSS Y0_ Y0 not
+X7 VDD VSS Y1_ Y1 not
+X8 VDD VSS Y2_ Y2 not
+X9 VDD VSS Y3_ Y3 not
+.ends dec_2to4
+
+.subckt dec_3to6 VDD VSS A2 A1 A0 Y0 Y1 Y2 Y3 Y4 Y5
+X0 VDD VSS A2 Y4 not
+X1 VDD VSS Y4 Y5 not
+X2 VDD VSS A1 A0 Y0 Y1 Y2 Y3 dec_2to4
+.ends dec_3to6
+
+.subckt row_dec4 VDD VSS A0 A1 DC0 DC1 DC2 DC3
+X0 VDD VSS A1 A0 Y0 Y1 Y2 Y3 dec_2to4
+X1 VDD VSS Y0 DC0 not
+X2 VDD VSS Y1 DC1 not
+X3 VDD VSS Y2 DC2 not
+X4 VDD VSS Y3 DC3 not
+.ends row_dec4
+
+.subckt row_driver VDD VSS WLEN A B
+X0 VDD VSS A WLEN net1 nand2
+X1 B net1 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=40u
+X2 B net1 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=40u
+.ends row_driver
+
+.subckt rd_arr_4 VDD VSS WLEN DC0 DC1 DC2 DC3 WL0 WL1 WL2 WL3
+X0 VDD VSS WLEN DC0 WL0 row_driver
+X1 VDD VSS WLEN DC1 WL1 row_driver
+X2 VDD VSS WLEN DC2 WL2 row_driver
+X3 VDD VSS WLEN DC3 WL3 row_driver
+.ends rd_arr_4
+
+.subckt col_dec4 VDD VSS A0 A1 DC0 DC1 DC2 DC3
+X0 VDD VSS A1 A0 Y0 Y1 Y2 Y3 dec_2to4
+X1 VDD VSS Y0 DC0 not
+X2 VDD VSS Y1 DC1 not
+X3 VDD VSS Y2 DC2 not
+X4 VDD VSS Y3 DC3 not
+.ends col_dec4
+
+.subckt dido VDD VSS PCHG WREN SEL BL BL_ DW DW_ DR DR_
+X0 BL_ net6 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=1000.0n
+X1 BL net6 BL_ VDD sky130_fd_pr__pfet_01v8 l=150n w=1000.0n
+X2 BL net6 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=1000.0n
+X3 net6 net5 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=420n
+X4 net6 net5 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=420n
+X5 net5 PCHG VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=420n
+X6 net5 PCHG VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=420n
+X7 BL_ net3 DR_ VDD sky130_fd_pr__pfet_01v8 l=150n w=1000.0n
+X8 DR net3 BL VDD sky130_fd_pr__pfet_01v8 l=150n w=1000.0n
+X9 net4 SEL VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=420n
+X10 BL net2 DW VSS sky130_fd_pr__nfet_01v8 l=150n w=2u
+X11 DW_ net2 BL_ VSS sky130_fd_pr__nfet_01v8 l=150n w=2u
+X12 net4 SEL VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=420n
+X13 net3 net4 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=420n
+X14 net3 net4 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=420n
+X15 VDD VSS net4 WREN net1 nand2
+X16 VDD VSS net1 net2 not
+.ends dido
+
+.subckt dido_arr_16 VDD VSS PCHG WREN SEL0 SEL1 SEL2 SEL3 SEL4 SEL5 SEL6 SEL7 SEL8 SEL9 SEL10 SEL11 SEL12 SEL13 SEL14 SEL15 BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 BL4 BL_4 BL5 BL_5 BL6 BL_6 BL7 BL_7 BL8 BL_8 BL9 BL_9 BL10 BL_10 BL11 BL_11 BL12 BL_12 BL13 BL_13 BL14 BL_14 BL15 BL_15 DW0 DW_0 DW1 DW_1 DW2 DW_2 DW3 DW_3 DW4 DW_4 DW5 DW_5 DW6 DW_6 DW7 DW_7 DW8 DW_8 DW9 DW_9 DW10 DW_10 DW11 DW_11 DW12 DW_12 DW13 DW_13 DW14 DW_14 DW15 DW_15 DR0 DR_0 DR1 DR_1 DR2 DR_2 DR3 DR_3 DR4 DR_4 DR5 DR_5 DR6 DR_6 DR7 DR_7 DR8 DR_8 DR9 DR_9 DR10 DR_10 DR11 DR_11 DR12 DR_12 DR13 DR_13 DR14 DR_14 DR15 DR_15
+X0 VDD VSS PCHG WREN SEL0 BL0 BL_0 DW0 DW_0 DR0 DR_0 dido
+X1 VDD VSS PCHG WREN SEL1 BL1 BL_1 DW1 DW_1 DR1 DR_1 dido
+X2 VDD VSS PCHG WREN SEL2 BL2 BL_2 DW2 DW_2 DR2 DR_2 dido
+X3 VDD VSS PCHG WREN SEL3 BL3 BL_3 DW3 DW_3 DR3 DR_3 dido
+X4 VDD VSS PCHG WREN SEL4 BL4 BL_4 DW4 DW_4 DR4 DR_4 dido
+X5 VDD VSS PCHG WREN SEL5 BL5 BL_5 DW5 DW_5 DR5 DR_5 dido
+X6 VDD VSS PCHG WREN SEL6 BL6 BL_6 DW6 DW_6 DR6 DR_6 dido
+X7 VDD VSS PCHG WREN SEL7 BL7 BL_7 DW7 DW_7 DR7 DR_7 dido
+X8 VDD VSS PCHG WREN SEL8 BL8 BL_8 DW8 DW_8 DR8 DR_8 dido
+X9 VDD VSS PCHG WREN SEL9 BL9 BL_9 DW9 DW_9 DR9 DR_9 dido
+X10 VDD VSS PCHG WREN SEL10 BL10 BL_10 DW10 DW_10 DR10 DR_10 dido
+X11 VDD VSS PCHG WREN SEL11 BL11 BL_11 DW11 DW_11 DR11 DR_11 dido
+X12 VDD VSS PCHG WREN SEL12 BL12 BL_12 DW12 DW_12 DR12 DR_12 dido
+X13 VDD VSS PCHG WREN SEL13 BL13 BL_13 DW13 DW_13 DR13 DR_13 dido
+X14 VDD VSS PCHG WREN SEL14 BL14 BL_14 DW14 DW_14 DR14 DR_14 dido
+X15 VDD VSS PCHG WREN SEL15 BL15 BL_15 DW15 DW_15 DR15 DR_15 dido
+.ends dido_arr_16
+
+.subckt del10 VDD VSS A B
+X0 VDD VSS A net1 notdel
+X1 VDD VSS net1 net2 notdel
+X2 VDD VSS net2 net3 notdel
+X3 VDD VSS net3 net4 notdel
+X4 VDD VSS net4 net5 notdel
+X5 VDD VSS net5 net6 notdel
+X6 VDD VSS net6 net7 notdel
+X7 VDD VSS net7 net8 notdel
+X8 VDD VSS net8 net9 notdel
+X9 VDD VSS net9 net10 notdel
+X10 VDD VSS net10 net11 notdel
+X11 VDD VSS A net11 net12 nand2
+X12 VDD VSS net12 B not
+.ends del10
+
+.subckt ctrl VDD VSS clk WREN PCHG WLEN SAEN
+X0 VDD VSS clk PCHG_ del10
+X1 VDD VSS PCHG_ PCHG not
+X2 VDD VSS PCHG WLEN_pulse del10
+X3 VDD VSS WLEN_pulse WLEN_pulse_ not
+X4 net2 RST VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X5 net2 WLEN_pulse VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X6 WLEN net2 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X7 WLEN net2 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X8 net2 RST net1 VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X9 net1 WLEN VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=420n
+X10 net1 WLEN VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=420n
+X11 VDD VSS WLEN_pulse_ SAEN_pulse del10
+X12 net4 RST VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X13 net4 SAEN_pulse VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X14 SAEN net4 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=800n
+X15 SAEN net4 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X16 net4 RST net3 VSS sky130_fd_pr__nfet_01v8 l=150n w=800n
+X17 net3 SAEN VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=420n
+X18 net3 SAEN VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=420n
+X19 VDD VSS clk clk_ not
+X20 VDD VSS clk_ RST_ del10
+X21 VDD VSS RST_ RST not
+.ends ctrl
+
+.subckt input_reg5 VDD VSS clk D0 D1 D2 D3 D4 Q0 Q1 Q2 Q3 Q4
+X0 VDD VSS clk D0 Q0 in_reg
+X1 VDD VSS clk D1 Q1 in_reg
+X2 VDD VSS clk D2 Q2 in_reg
+X3 VDD VSS clk D3 Q3 in_reg
+X4 VDD VSS clk D4 Q4 in_reg
+.ends input_reg5
+
+.subckt datain_reg4 VDD VSS clk din0 din1 din2 din3 DW0 DW_0 DW1 DW_1 DW2 DW_2 DW3 DW_3
+X0 VDD VSS clk din0 din_r0 in_reg
+X1 VDD VSS clk din1 din_r1 in_reg
+X2 VDD VSS clk din2 din_r2 in_reg
+X3 VDD VSS clk din3 din_r3 in_reg
+X4 DW_0 din_r0 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=4u
+X5 DW_0 din_r0 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=4u
+X6 DW0 DW_0 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=4u
+X7 DW0 DW_0 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=4u
+X8 DW_1 din_r1 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=4u
+X9 DW_1 din_r1 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=4u
+X10 DW1 DW_1 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=4u
+X11 DW1 DW_1 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=4u
+X12 DW_2 din_r2 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=4u
+X13 DW_2 din_r2 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=4u
+X14 DW2 DW_2 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=4u
+X15 DW2 DW_2 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=4u
+X16 DW_3 din_r3 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=4u
+X17 DW_3 din_r3 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=4u
+X18 DW3 DW_3 VDD VDD sky130_fd_pr__pfet_01v8 l=150n w=4u
+X19 DW3 DW_3 VSS VSS sky130_fd_pr__nfet_01v8 l=150n w=4u
+.ends datain_reg4
+
+.subckt bit_arr_16 VDD VSS BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 BL4 BL_4 BL5 BL_5 BL6 BL_6 BL7 BL_7 BL8 BL_8 BL9 BL_9 BL10 BL_10 BL11 BL_11 BL12 BL_12 BL13 BL_13 BL14 BL_14 BL15 BL_15 WL
+X0 VDD VSS WL BL0 BL_0 bit_cell
+X1 VDD VSS WL BL1 BL_1 bit_cell
+X2 VDD VSS WL BL2 BL_2 bit_cell
+X3 VDD VSS WL BL3 BL_3 bit_cell
+X4 VDD VSS WL BL4 BL_4 bit_cell
+X5 VDD VSS WL BL5 BL_5 bit_cell
+X6 VDD VSS WL BL6 BL_6 bit_cell
+X7 VDD VSS WL BL7 BL_7 bit_cell
+X8 VDD VSS WL BL8 BL_8 bit_cell
+X9 VDD VSS WL BL9 BL_9 bit_cell
+X10 VDD VSS WL BL10 BL_10 bit_cell
+X11 VDD VSS WL BL11 BL_11 bit_cell
+X12 VDD VSS WL BL12 BL_12 bit_cell
+X13 VDD VSS WL BL13 BL_13 bit_cell
+X14 VDD VSS WL BL14 BL_14 bit_cell
+X15 VDD VSS WL BL15 BL_15 bit_cell
+.ends bit_arr_16
+
+.subckt se_arr_4 VDD VSS SAEN BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 SB0 SB1 SB2 SB3
+X0 VDD VSS SAEN BL0 BL_0 SB0 se_cell
+X1 VDD VSS SAEN BL1 BL_1 SB1 se_cell
+X2 VDD VSS SAEN BL2 BL_2 SB2 se_cell
+X3 VDD VSS SAEN BL3 BL_3 SB3 se_cell
+.ends se_arr_4
+
+.subckt mat_arr_16 VDD VSS BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 BL4 BL_4 BL5 BL_5 BL6 BL_6 BL7 BL_7 BL8 BL_8 BL9 BL_9 BL10 BL_10 BL11 BL_11 BL12 BL_12 BL13 BL_13 BL14 BL_14 BL15 BL_15 WL0 WL1 WL2 WL3
+X0 VDD VSS BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 BL4 BL_4 BL5 BL_5 BL6 BL_6 BL7 BL_7 BL8 BL_8 BL9 BL_9 BL10 BL_10 BL11 BL_11 BL12 BL_12 BL13 BL_13 BL14 BL_14 BL15 BL_15 WL0 bit_arr_16
+X1 VDD VSS BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 BL4 BL_4 BL5 BL_5 BL6 BL_6 BL7 BL_7 BL8 BL_8 BL9 BL_9 BL10 BL_10 BL11 BL_11 BL12 BL_12 BL13 BL_13 BL14 BL_14 BL15 BL_15 WL1 bit_arr_16
+X2 VDD VSS BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 BL4 BL_4 BL5 BL_5 BL6 BL_6 BL7 BL_7 BL8 BL_8 BL9 BL_9 BL10 BL_10 BL11 BL_11 BL12 BL_12 BL13 BL_13 BL14 BL_14 BL15 BL_15 WL2 bit_arr_16
+X3 VDD VSS BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 BL4 BL_4 BL5 BL_5 BL6 BL_6 BL7 BL_7 BL8 BL_8 BL9 BL_9 BL10 BL_10 BL11 BL_11 BL12 BL_12 BL13 BL_13 BL14 BL_14 BL15 BL_15 WL3 bit_arr_16
+.ends mat_arr_16
+
+.subckt sram16x4 VDD VSS clk addr0 addr1 addr2 addr3 din0 din1 din2 din3 Q0 Q1 Q2 Q3 write
+X0 VDD VSS clk addr0 addr1 addr2 addr3 write A0 A1 A2 A3 WREN input_reg5
+X1 VDD VSS A2 A3 DC0 DC1 DC2 DC3 row_dec4
+X2 VDD VSS WLEN DC0 DC1 DC2 DC3 WL0 WL1 WL2 WL3 rd_arr_4
+X3 VDD VSS A0 A1 SEL0 SEL1 SEL2 SEL3 col_dec4
+X4 VDD VSS PCHG WREN SEL0 SEL1 SEL2 SEL3 SEL0 SEL1 SEL2 SEL3 SEL0 SEL1 SEL2 SEL3 SEL0 SEL1 SEL2 SEL3 BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 BL4 BL_4 BL5 BL_5 BL6 BL_6 BL7 BL_7 BL8 BL_8 BL9 BL_9 BL10 BL_10 BL11 BL_11 BL12 BL_12 BL13 BL_13 BL14 BL_14 BL15 BL_15 DW0 DW_0 DW0 DW_0 DW0 DW_0 DW0 DW_0 DW1 DW_1 DW1 DW_1 DW1 DW_1 DW1 DW_1 DW2 DW_2 DW2 DW_2 DW2 DW_2 DW2 DW_2 DW3 DW_3 DW3 DW_3 DW3 DW_3 DW3 DW_3 DR0 DR_0 DR0 DR_0 DR0 DR_0 DR0 DR_0 DR1 DR_1 DR1 DR_1 DR1 DR_1 DR1 DR_1 DR2 DR_2 DR2 DR_2 DR2 DR_2 DR2 DR_2 DR3 DR_3 DR3 DR_3 DR3 DR_3 DR3 DR_3 dido_arr_16
+X5 VDD VSS clk din0 din1 din2 din3 DW0 DW_0 DW1 DW_1 DW2 DW_2 DW3 DW_3 datain_reg4
+X6 VDD VSS BL0 BL_0 BL1 BL_1 BL2 BL_2 BL3 BL_3 BL4 BL_4 BL5 BL_5 BL6 BL_6 BL7 BL_7 BL8 BL_8 BL9 BL_9 BL10 BL_10 BL11 BL_11 BL12 BL_12 BL13 BL_13 BL14 BL_14 BL15 BL_15 WL0 WL1 WL2 WL3 mat_arr_16
+X7 VDD VSS SAEN DR0 DR_0 DR1 DR_1 DR2 DR_2 DR3 DR_3 Q0 Q1 Q2 Q3 se_arr_4
+X8 VDD VSS clk WREN PCHG WLEN SAEN ctrl
+.ends sram16x4
+

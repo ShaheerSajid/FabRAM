@@ -1,0 +1,17 @@
+cell                name
+bit_cell            sram_v1
+row_driver          row_driver_row_driver
+not                 not
+nand2               nand2
+nand3               nand3
+nand4               nand4
+dec_2to4            dec_2to4
+dec_3to6            dec_3to6
+dido                dido
+in_reg              in_reg
+sense_amplifier     sense_amp
+control             ctctrl
+del_cell            nd1notdel_1
+colum_decoder4      cdcol_dec4
+colum_decoder8      cdcol_dec8
+colum_decoder16     cdcol_dec16
