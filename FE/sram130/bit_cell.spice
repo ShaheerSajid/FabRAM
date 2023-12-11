@@ -1,0 +1,8 @@
+* SPICE3 file created from bit_cell.ext - technology: sky130A
+
+X0 a_182_n47# a_58_30# VDD VDD sky130_fd_pr__pfet_01v8 ad=0.1218 pd=1.42 as=0.1218 ps=1.42 w=0.42 l=0.15
+X1 a_58_30# a_182_n47# VDD VDD sky130_fd_pr__pfet_01v8 ad=0.1218 pd=1.42 as=0.121825 ps=1.425 w=0.42 l=0.15
+X2 a_182_n47# a_58_30# VSS VSS sky130_fd_pr__nfet_01v8 ad=0.232 pd=2.18 as=0.232 ps=2.18 w=0.8 l=0.15
+X3 a_58_30# a_182_n47# VSS VSS sky130_fd_pr__nfet_01v8 ad=0.406 pd=3.96 as=0.232025 ps=2.185 w=0.8 l=0.15
+X4 a_182_n47# WL BL VSS sky130_fd_pr__nfet_01v8 ad=0.174 pd=1.78 as=0.174 ps=1.78 w=0.6 l=0.15
+X5 BL_ WL a_58_30# VSS sky130_fd_pr__nfet_01v8 ad=0.174 pd=1.78 as=0 ps=0 w=0.6 l=0.15
