@@ -53,10 +53,10 @@ print(("Completed: Took {:.2f} ms".format((end_time-start_time)*1000)))
 ##########################
 # GDS
 ##########################
-# start_time = time.time()
-# gds.gen_gds(mem_words, mem_bits, col_mux)
-# end_time = time.time()
-# print(("Completed: Took {:.2f} ms".format((end_time-start_time)*1000)))
+start_time = time.time()
+gds.gen_gds(mem_words, mem_bits, col_mux)
+end_time = time.time()
+print(("Completed: Took {:.2f} ms".format((end_time-start_time)*1000)))
 
 ##########################
 # LEF

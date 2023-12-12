@@ -1,0 +1,23 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1702307274
+<< poly >>
+rect 94 -86 124 36
+use sky130_fd_pr__pfet_01v8_4Y88KP  m1
+timestamp 1702307274
+transform 1 0 109 0 1 104
+box -109 -104 109 104
+use sky130_fd_pr__nfet_01v8_A6LSUL  m3
+timestamp 1702307274
+transform 1 0 109 0 1 -154
+box -73 -68 73 68
+use sky130_fd_pr__nfet_01v8_A6LSUL  m4
+timestamp 1702307274
+transform 1 0 197 0 1 -154
+box -73 -68 73 68
+use sky130_fd_pr__pfet_01v8_4Y88KP  sky130_fd_pr__pfet_01v8_4Y88KP_0
+timestamp 1702307274
+transform -1 0 197 0 1 104
+box -109 -104 109 104
+<< end >>
