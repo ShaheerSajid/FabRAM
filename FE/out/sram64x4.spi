@@ -150,8 +150,8 @@ X33 VDD VSS DC_15 DC15 not
 
 .subckt row_driver VDD VSS WLEN A B
 X0 VDD VSS A WLEN net1 nand2
-X1 B net1 VDD VDD sky130_fd_pr__pfet_01v8 l=0.15 w=1
-X2 B net1 VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=1
+X1 B net1 VDD VDD sky130_fd_pr__pfet_01v8 l=0.15 w=2
+X2 B net1 VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=2
 .ends row_driver
 
 .subckt rd_arr_16 VDD VSS WLEN DC0 DC1 DC2 DC3 DC4 DC5 DC6 DC7 DC8 DC9 DC10 DC11 DC12 DC13 DC14 DC15 WL0 WL1 WL2 WL3 WL4 WL5 WL6 WL7 WL8 WL9 WL10 WL11 WL12 WL13 WL14 WL15

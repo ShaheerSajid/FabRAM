@@ -1,6 +1,6 @@
 cell                name
 bit_cell            bit_cell_f
-row_driver          none
+row_driver          row_driver_f
 not                 not_f
 nand2               nand2_f
 nand3               nand3_f

@@ -1,42 +1,80 @@
 magic
 tech sky130A
 magscale 1 2
-timestamp 1702396496
-<< error_s >>
-rect 399 173 400 203
-rect 487 173 488 203
-rect 575 173 576 203
-rect 663 173 664 203
-rect 751 173 752 203
+timestamp 1702452161
 << poly >>
-rect 400 173 430 386
-rect 488 173 518 386
-rect 576 173 606 386
-rect 664 173 694 386
-rect 752 173 782 386
+rect 400 324 430 386
+rect 347 306 430 324
+rect 488 306 518 386
+rect 576 306 606 386
+rect 664 306 694 386
+rect 752 306 782 386
+rect 347 272 357 306
+rect 391 272 782 306
+rect 347 256 430 272
+rect 400 173 430 256
+rect 488 173 518 272
+rect 576 173 606 272
+rect 664 173 694 272
+rect 752 173 782 272
+<< polycont >>
+rect 357 272 391 306
+<< locali >>
+rect 442 358 476 408
+rect 618 358 652 408
+rect 794 358 828 408
+rect 442 323 828 358
+rect 794 306 828 323
+rect 340 272 357 306
+rect 391 272 407 306
+rect 794 220 828 272
+rect 442 185 828 220
+rect 442 151 476 185
+rect 618 151 652 185
+rect 794 151 828 185
+<< viali >>
+rect 357 272 391 306
+rect 794 272 828 306
+<< metal1 >>
+rect 306 524 876 558
+rect 354 496 388 524
+rect 530 496 564 524
+rect 706 496 740 524
+rect 345 306 403 312
+rect 306 272 357 306
+rect 391 272 403 306
+rect 345 266 403 272
+rect 782 306 840 312
+rect 782 272 794 306
+rect 828 272 876 306
+rect 782 266 840 272
+rect 354 34 388 63
+rect 530 34 564 63
+rect 706 34 740 63
+rect 306 0 876 34
 use nand2  nand2_0 ~/Desktop/FabRAM/FE/sram130/nand2
 timestamp 1702396496
 transform 1 0 0 0 1 -91
 box 0 91 306 649
 use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_0 ~/Desktop/FabRAM/FE/sram130/common
 timestamp 1702396496
-transform 1 0 766 0 1 105
+transform 1 0 767 0 1 105
 box -73 -68 73 68
 use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_1
 timestamp 1702396496
-transform 1 0 414 0 1 105
+transform 1 0 415 0 1 105
 box -73 -68 73 68
 use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_2
 timestamp 1702396496
-transform -1 0 502 0 1 105
+transform -1 0 503 0 1 105
 box -73 -68 73 68
 use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_3
 timestamp 1702396496
-transform 1 0 590 0 1 105
+transform 1 0 591 0 1 105
 box -73 -68 73 68
 use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_4
 timestamp 1702396496
-transform -1 0 678 0 1 105
+transform -1 0 679 0 1 105
 box -73 -68 73 68
 use sky130_fd_pr__pfet_01v8_4Y88KP  sky130_fd_pr__pfet_01v8_4Y88KP_0 ~/Desktop/FabRAM/FE/sram130/common
 timestamp 1702396496

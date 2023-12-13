@@ -24,6 +24,12 @@ def cell_get_dim(cell):
   dims.append([urx,ury])
   return dims
 
+def get_lay_info(layer):
+    print()
+
+def get_via_info(cut): 
+    print()
+
 
 def gen_gds(mem_words, mem_bits, col_mux):
     #rows
@@ -61,20 +67,7 @@ def gen_gds(mem_words, mem_bits, col_mux):
                                 cell_get_dim(lib.cells[cellnames['bit_cell']])[0])
     #add cell
     bit_arr_cell.add(cellarray)
-    #add labels
-    #you need to add label only once maybe to first row or last
-    #so this means track what you have added 
-    #if found dont add label if not then add label and store in record
-    # cnt = 0
-    # for l in bit_arr_cell.get_labels():
-    #     if(l.layer != 63 and l.layer != 127): #not text or IP (you can add functionaility to remove it)
-    #         if re.search("^BL",l.text):
-    #             bit_arr_cell.add(gdspy.Label(l.text+str(int(cnt/2)), (l.position[0], l.position[1]), 'o',layer=l.layer, texttype=l.texttype))
-    #             cnt += 1
-    #         else:
-    #             bit_arr_cell.add(gdspy.Label(l.text, (l.position[0], l.position[1]), 'o',layer=l.layer, texttype=l.texttype))
-    #you can set depth=0 to get labels of top cell only
-
+    
     mat_arr_cell = lib.new_cell(name=mat_prefix+str(num_bits))
     matarray = gdspy.CellArray(lib.cells[cell_prefix+str(num_bits)],
                                 1,num_words,
@@ -332,17 +325,18 @@ def gen_gds(mem_words, mem_bits, col_mux):
     # predecoder lines
     #######################
     layer = "M2_drw"
-    via = "VIA2_drw"
     l_w = rules[layer][0]
-    v_w = rules[via][0]
-    v_encl = rules[via][1]
     l_s = rules[layer][1]
-    #FIXME: here it should be v_encl
-    ltol_dist = l_w/2 + v_encl/2 + l_s
-
     l_num = layers[layer][0]
     l_data = layers[layer][1]
 
+    v1_w        = rules["VIA1_drw"][0]
+    v1_encl_t   = rules["VIA1_drw"][2][0]
+
+    v2_w        = rules["VIA2_drw"][0]
+    v2_encl_b   = rules["VIA2_drw"][1][0]
+    #FIXME: here it should be via1_top to via2_bot
+    ltol_dist = v1_w/2 + v1_encl_t + v2_w/2 + v2_encl_b + l_s
 
     pre_dec_lines = gdspy.Path(width=l_w, initial_point=(0, -0.02), number_of_paths=num_predec_lines, distance=ltol_dist)#width, spacing: C-C
     pre_dec_lines.segment(nandarray.get_bounding_box()[1][1]+1, "+y", layer=l_num,datatype=l_data) #layer: M2=32, Datatype = 0
@@ -381,8 +375,7 @@ def gen_gds(mem_words, mem_bits, col_mux):
     if(num != 0):
         decarray = gdspy.CellArray(lib.cells[cellnames['dec_2to4']],
                                 1,num,
-                                [lib.cells[cellnames['dec_2to4']].get_bounding_box()[1][0],
-                                lib.cells[cellnames['dec_2to4']].get_bounding_box()[1][1]],
+                                cell_get_dim(lib.cells[cellnames['dec_2to4']])[1],
                                 [-(2*width_pre_dec_lines+2*ltol_dist+dec_unit_width),
                                 dec_unit.get_bounding_box()[1][1]])
         row_dec_cell.add(decarray)
@@ -401,10 +394,6 @@ def gen_gds(mem_words, mem_bits, col_mux):
     Ys = list(set(Ys))
     Ys.sort(reverse=True)
 
-    #remove labels
-    #row_dec_cell.flatten(single_texttype=0)
-    #row_dec_cell.remove_labels(lambda lbl: re.search("^Y[\d]+$",lbl.text))
-
     #######################
     # decoder to vertical
     #######################
@@ -412,7 +401,8 @@ def gen_gds(mem_words, mem_bits, col_mux):
     via = "VIA2_drw"
     l_w = rules[layer][0]
     v_w = rules[via][0]
-    v_encl = rules[via][1]
+    v_encl_bot = rules[via][1]
+    v_encl_top = rules[via][2]
     l_s = rules[layer][1]
 
     l_num = layers[layer][0]
@@ -421,14 +411,11 @@ def gen_gds(mem_words, mem_bits, col_mux):
     v_num = layers[via][0]
     v_data = layers[via][1]
 
-    #FIXME: here the line width is of M2 not M3 hence 0.17
     pre_dec_lines_Xs = []
     for p in pre_dec_lines.polygons:
-        pre_dec_lines_Xs.append(p[0][0]+0.17/2)
+        pre_dec_lines_Xs.append(p[0][0]+rules["M2_drw"][0]/2)
         
     for i in range(len(Ys)):
-        #rename labels from Y#
-        #row_dec_cell.add(gdspy.Label('Y'+str(i), (X, Ys[i]), 'o',layer=133, texttype=0))
         #generate horizontal wires
         in_dec_lines = gdspy.Path(width= l_w, initial_point=(X, Ys[i]), number_of_paths=1)
         in_dec_lines.segment(pre_dec_lines_Xs[i]-X, "+x", layer=l_num,datatype=l_data)
@@ -436,8 +423,8 @@ def gen_gds(mem_words, mem_bits, col_mux):
         x = pre_dec_lines_Xs[i]
         y = Ys[i]
         row_dec_cell.add(gdspy.Rectangle((x-v_w/2, y-v_w/2), (x+v_w/2, y+v_w/2), layer=v_num, datatype=v_data))
-        row_dec_cell.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num-1, datatype=l_data))
-        row_dec_cell.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num, datatype=l_data))
+        row_dec_cell.add(gdspy.Rectangle((x-v_encl_bot[0]-v_w/2, y-v_encl_bot[1]-v_w/2), (x+v_encl_bot[0]+v_w/2, y+v_encl_bot[1]+v_w/2), layer=l_num-1, datatype=l_data))
+        row_dec_cell.add(gdspy.Rectangle((x-v_encl_top[0]-v_w/2, y-v_encl_top[1]-v_w/2), (x+v_encl_top[0]+v_w/2, y+v_encl_top[1]+v_w/2), layer=l_num, datatype=l_data))
         row_dec_cell.add(in_dec_lines)
 
     #######################
@@ -447,7 +434,8 @@ def gen_gds(mem_words, mem_bits, col_mux):
     via = "VIA1_drw"
     l_w = rules[layer][0]
     v_w = rules[via][0]
-    v_encl = rules[via][1]
+    v_encl_bot = rules[via][1]
+    v_encl_top = rules[via][2]
     l_s = rules[layer][1]
 
     l_num = layers[layer][0]
@@ -466,20 +454,19 @@ def gen_gds(mem_words, mem_bits, col_mux):
             x = pre_dec_lines_Xs[l_idx]
             y = Ys_nand_col[num_inputs*i+j]
             row_dec_cell.add(gdspy.Rectangle((x-v_w/2, y-v_w/2), (x+v_w/2, y+v_w/2), layer=v_num, datatype=v_data))
-            row_dec_cell.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num, datatype=l_data))
-            row_dec_cell.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num+1, datatype=l_data))
+            row_dec_cell.add(gdspy.Rectangle((x-v_encl_bot[0]-v_w/2, y-v_encl_bot[1]-v_w/2), (x+v_encl_bot[0]+v_w/2, y+v_encl_bot[1]+v_w/2), layer=l_num, datatype=l_data))
+            row_dec_cell.add(gdspy.Rectangle((x-v_encl_top[0]-v_w/2, y-v_encl_top[1]-v_w/2), (x+v_encl_top[0]+v_w/2, y+v_encl_top[1]+v_w/2), layer=l_num+1, datatype=l_data))
             row_dec_cell.add(in_dec_lines)
 
     # #######################
     # # row driver
     # #######################
-    # row_driver_arr_cell = lib.new_cell(name='row_driver'+str(mem_bits))
-    # row_driver_array = gdspy.CellArray(lib.cells[cellnames['row_driver']],
-    #                         1,num_words,
-    #                         [lib.cells[cellnames['row_driver']].get_bounding_box()[1][0],
-    #                         lib.cells[cellnames['row_driver']].get_bounding_box()[1][1]],
-    #                         [0,0])
-    # row_driver_arr_cell.add(row_driver_array)
+    row_driver_arr_cell = lib.new_cell(name='row_driver'+str(mem_bits))
+    row_driver_array = gdspy.CellArray(lib.cells[cellnames['row_driver']],
+                            1,num_words,
+                            cell_get_dim(lib.cells[cellnames['row_driver']])[1],
+                            cell_get_dim(lib.cells[cellnames['row_driver']])[0])
+    row_driver_arr_cell.add(row_driver_array)
 
     # #######################
     # # input reg col
@@ -545,11 +532,10 @@ def gen_gds(mem_words, mem_bits, col_mux):
     #merge
     #matrix
     cell.add(gdspy.CellReference(mat_arr_cell,  [0,0]))
-    cell.add(gdspy.CellReference(row_dec_cell,  [-4,0]))
     #row_decoder
-    # cell.add(gdspy.CellReference(row_dec_cell,  [-(row_dec_cell.get_bounding_box()[1][0]+row_driver_arr_cell.get_bounding_box()[1][0]),0]))#WL label position
-    # #row driver
-    # cell.add(gdspy.CellReference(row_driver_arr_cell,  [-(row_driver_arr_cell.get_bounding_box()[1][0]),0]))
+    cell.add(gdspy.CellReference(row_dec_cell,  [-(row_dec_cell.get_bounding_box()[1][0]+row_driver_arr_cell.get_bounding_box()[1][0]),0]))#WL label position
+    #row driver
+    cell.add(gdspy.CellReference(row_driver_arr_cell,  [-(row_driver_arr_cell.get_bounding_box()[1][0]),0]))
     # #col decoder
     # cell.add(gdspy.CellReference(lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)],  [-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][0],-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][1]]))
     # #control

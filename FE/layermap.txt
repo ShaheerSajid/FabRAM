@@ -8,5 +8,4 @@ M2_pin      69      5
 M3_pin      70      5              
 M4_pin      71      5                           
 VIA1_drw    68      44              
-VIA2_drw    69      44              
-VIA3_drw    70      44              
+VIA2_drw    69      44                         

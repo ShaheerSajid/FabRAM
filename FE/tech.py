@@ -29,7 +29,13 @@ def populate_rules(file):
     rules = {}
     for l in lines[1:]:
         l = l.split()
-        rules[l[0]] = [float(l[1]), float(l[2])]
+        if "VIA" in l[0]:
+          via_encl = l[2].split(',')
+          bot_encl = [float(via_encl[0]),float(via_encl[1])]
+          top_encl = [float(via_encl[2]),float(via_encl[3])]
+          rules[l[0]] = [float(l[1]),bot_encl,top_encl]
+        else:
+          rules[l[0]] = [float(l[1]), float(l[2])]
     return rules
 
 def populate_names(file):

@@ -167,8 +167,8 @@ def dido_gen(name, not_name, nand2_name):
 def row_driver_cell(name, nand2_name):
     circuit = SubCircuit(name, 'VDD VSS WLEN A B')
     circuit.X(0,nand2_name,'VDD','VSS','A','WLEN','net1')
-    circuit.X(1, pmos_device,'B', 'net1', 'VDD', 'VDD',  w='1', l='0.15')
-    circuit.X(2, nmos_device,'B', 'net1', 'VSS', 'VSS',  w='1', l='0.15')
+    circuit.X(1, pmos_device,'B', 'net1', 'VDD', 'VDD',  w='2', l='0.15')
+    circuit.X(2, nmos_device,'B', 'net1', 'VSS', 'VSS',  w='2', l='0.15')
     return circuit
 
 # control
