@@ -1,7 +1,7 @@
 magic
 tech sky130A
 magscale 1 2
-timestamp 1702392439
+timestamp 1702465625
 << nwell >>
 rect 0 488 394 696
 << nmos >>
@@ -143,8 +143,9 @@ rect 346 562 352 622
 rect 306 550 352 562
 rect 136 522 170 550
 rect 312 522 346 550
-rect 48 503 106 509
-rect 0 469 60 503
+rect 0 503 106 522
+rect 0 488 60 503
+rect 48 469 60 488
 rect 94 469 106 503
 rect 136 488 346 522
 rect 48 463 106 469
@@ -155,9 +156,10 @@ rect 214 398 226 432
 rect 168 392 226 398
 rect 312 410 394 444
 rect 168 357 226 363
-rect 0 323 180 357
+rect 168 351 180 357
+rect 0 323 180 351
 rect 214 323 226 357
-rect 168 317 226 323
+rect 0 317 226 323
 rect 312 285 346 410
 rect 42 273 88 285
 rect 42 213 48 273
@@ -179,9 +181,9 @@ rect 48 172 82 201
 rect 0 138 394 172
 << labels >>
 rlabel metal1 0 662 34 696 0 VDD
-rlabel metal1 0 469 34 503 0 A
-rlabel metal1 0 398 34 432 0 B
-rlabel metal1 0 323 34 357 0 C
 rlabel metal1 0 138 34 172 0 VSS
 rlabel metal1 360 410 394 444 0 Y
+rlabel metal1 0 317 34 351 0 C
+rlabel metal1 0 398 34 432 0 B
+rlabel metal1 0 488 34 522 0 A
 << end >>

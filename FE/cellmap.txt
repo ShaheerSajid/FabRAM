@@ -6,7 +6,7 @@ nand2               nand2_f
 nand3               nand3_f
 nand4               none
 dec_2to4            dec_2to4_f
-dec_3to6            none
+dec_3to6            dec_3to6_f
 dido                none
 in_reg              none
 sense_amplifier     none
