@@ -1,23 +1,70 @@
 magic
 tech sky130A
 magscale 1 2
-timestamp 1702307274
+timestamp 1702396496
 << poly >>
-rect 94 -86 124 36
-use sky130_fd_pr__pfet_01v8_4Y88KP  m1
-timestamp 1702307274
-transform 1 0 109 0 1 104
-box -109 -104 109 104
-use sky130_fd_pr__nfet_01v8_A6LSUL  m3
-timestamp 1702307274
-transform 1 0 109 0 1 -154
+rect 94 471 124 477
+rect 44 455 124 471
+rect 44 421 60 455
+rect 94 421 124 455
+rect 44 405 124 421
+rect 94 264 124 405
+rect 182 326 212 477
+rect 182 310 262 326
+rect 182 276 212 310
+rect 246 276 262 310
+rect 182 264 262 276
+rect 212 260 262 264
+<< polycont >>
+rect 60 421 94 455
+rect 212 276 246 310
+<< locali >>
+rect 44 421 60 455
+rect 94 421 110 455
+rect 48 276 60 310
+rect 94 276 212 310
+rect 246 276 262 310
+<< viali >>
+rect 60 421 94 455
+rect 60 276 94 310
+<< metal1 >>
+rect 0 615 306 649
+rect 48 587 82 615
+rect 224 587 258 615
+rect 48 455 106 461
+rect 0 421 60 455
+rect 94 421 106 455
+rect 48 415 106 421
+rect 136 397 170 503
+rect 136 363 306 397
+rect 48 310 106 316
+rect 0 276 60 310
+rect 94 276 106 310
+rect 48 270 106 276
+rect 136 238 170 363
+rect 48 125 82 154
+rect 224 125 258 154
+rect 0 91 306 125
+use sky130_fd_pr__nfet_01v8_A6LSUL  m1 ~/Desktop/FabRAM/FE/sram130/common
+timestamp 1702396496
+transform 1 0 109 0 1 196
 box -73 -68 73 68
-use sky130_fd_pr__nfet_01v8_A6LSUL  m4
-timestamp 1702307274
-transform 1 0 197 0 1 -154
+use sky130_fd_pr__nfet_01v8_A6LSUL  m2
+timestamp 1702396496
+transform -1 0 197 0 1 196
 box -73 -68 73 68
-use sky130_fd_pr__pfet_01v8_4Y88KP  sky130_fd_pr__pfet_01v8_4Y88KP_0
-timestamp 1702307274
-transform -1 0 197 0 1 104
+use sky130_fd_pr__pfet_01v8_4Y88KP  m3 ~/Desktop/FabRAM/FE/sram130/common
+timestamp 1702396496
+transform 1 0 109 0 1 545
 box -109 -104 109 104
+use sky130_fd_pr__pfet_01v8_4Y88KP  m4
+timestamp 1702396496
+transform -1 0 197 0 1 545
+box -109 -104 109 104
+<< labels >>
+rlabel metal1 0 615 34 649 0 VDD
+rlabel metal1 0 421 34 455 0 A
+rlabel metal1 0 276 34 310 0 B
+rlabel metal1 0 91 34 125 0 VSS
+rlabel metal1 272 363 306 397 0 Y
 << end >>

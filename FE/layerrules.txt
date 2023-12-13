@@ -1,8 +1,8 @@
 layer       width   spacing
-M1_drw      0.09    0.09
-M2_drw      0.1     0.2
-M3_drw      0.1     0.2
-M4_drw      0.1     0.2
-VIA1_drw    0.1     0.18
-VIA2_drw    0.1     0.18
-VIA3_drw    0.1     0.18
+M1_drw      0.17    0.14
+M2_drw      0.17    0.14
+M3_drw      0.33     0.3
+M4_drw      0.33     0.3
+VIA1_drw    0.27    0.37
+VIA2_drw    0.28    0.38
+VIA3_drw    0.32    0.42

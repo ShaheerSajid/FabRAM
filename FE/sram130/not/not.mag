@@ -1,0 +1,71 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1702362869
+<< nwell >>
+rect 0 441 112 649
+<< psubdiff >>
+rect 36 226 94 250
+rect 36 166 48 226
+rect 82 166 94 226
+rect 36 142 94 166
+<< nsubdiff >>
+rect 36 575 94 599
+rect 36 515 48 575
+rect 82 515 94 575
+rect 36 491 94 515
+<< psubdiffcont >>
+rect 48 166 82 226
+<< nsubdiffcont >>
+rect 48 515 82 575
+<< poly >>
+rect 206 413 236 477
+rect 145 397 236 413
+rect 145 363 161 397
+rect 195 363 236 397
+rect 145 347 236 363
+rect 206 264 236 347
+<< polycont >>
+rect 161 363 195 397
+<< locali >>
+rect 36 575 194 591
+rect 36 515 48 575
+rect 82 515 194 575
+rect 36 499 194 515
+rect 248 397 282 499
+rect 145 363 161 397
+rect 195 363 211 397
+rect 248 242 282 363
+rect 48 226 194 242
+rect 82 166 194 226
+rect 48 150 194 166
+<< viali >>
+rect 161 363 195 397
+rect 248 363 282 397
+<< metal1 >>
+rect 0 615 330 649
+rect 160 587 194 615
+rect 149 397 207 403
+rect 0 363 161 397
+rect 195 363 207 397
+rect 149 357 207 363
+rect 236 397 294 403
+rect 236 363 248 397
+rect 282 363 330 397
+rect 236 357 294 363
+rect 160 125 194 154
+rect 0 91 330 125
+use sky130_fd_pr__pfet_01v8_4Y88KP  m1 ~/Desktop/FabRAM/FE/sram130/common
+timestamp 1702353901
+transform 1 0 221 0 1 545
+box -109 -104 109 104
+use sky130_fd_pr__nfet_01v8_A6LSUL  m2 ~/Desktop/FabRAM/FE/sram130/common
+timestamp 1702353901
+transform 1 0 221 0 1 196
+box -73 -68 73 68
+<< labels >>
+rlabel metal1 296 363 330 397 0 B
+rlabel metal1 0 615 34 649 0 VDD
+rlabel metal1 0 363 34 397 0 A
+rlabel metal1 0 91 34 125 0 VSS
+<< end >>

@@ -1,0 +1,61 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1702396496
+<< error_s >>
+rect 399 173 400 203
+rect 487 173 488 203
+rect 575 173 576 203
+rect 663 173 664 203
+rect 751 173 752 203
+<< poly >>
+rect 400 173 430 386
+rect 488 173 518 386
+rect 576 173 606 386
+rect 664 173 694 386
+rect 752 173 782 386
+use nand2  nand2_0 ~/Desktop/FabRAM/FE/sram130/nand2
+timestamp 1702396496
+transform 1 0 0 0 1 -91
+box 0 91 306 649
+use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_0 ~/Desktop/FabRAM/FE/sram130/common
+timestamp 1702396496
+transform 1 0 766 0 1 105
+box -73 -68 73 68
+use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_1
+timestamp 1702396496
+transform 1 0 414 0 1 105
+box -73 -68 73 68
+use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_2
+timestamp 1702396496
+transform -1 0 502 0 1 105
+box -73 -68 73 68
+use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_3
+timestamp 1702396496
+transform 1 0 590 0 1 105
+box -73 -68 73 68
+use sky130_fd_pr__nfet_01v8_A6LSUL  sky130_fd_pr__nfet_01v8_A6LSUL_4
+timestamp 1702396496
+transform -1 0 678 0 1 105
+box -73 -68 73 68
+use sky130_fd_pr__pfet_01v8_4Y88KP  sky130_fd_pr__pfet_01v8_4Y88KP_0 ~/Desktop/FabRAM/FE/sram130/common
+timestamp 1702396496
+transform -1 0 679 0 1 454
+box -109 -104 109 104
+use sky130_fd_pr__pfet_01v8_4Y88KP  sky130_fd_pr__pfet_01v8_4Y88KP_1
+timestamp 1702396496
+transform 1 0 415 0 1 454
+box -109 -104 109 104
+use sky130_fd_pr__pfet_01v8_4Y88KP  sky130_fd_pr__pfet_01v8_4Y88KP_2
+timestamp 1702396496
+transform -1 0 503 0 1 454
+box -109 -104 109 104
+use sky130_fd_pr__pfet_01v8_4Y88KP  sky130_fd_pr__pfet_01v8_4Y88KP_3
+timestamp 1702396496
+transform 1 0 591 0 1 454
+box -109 -104 109 104
+use sky130_fd_pr__pfet_01v8_4Y88KP  sky130_fd_pr__pfet_01v8_4Y88KP_4
+timestamp 1702396496
+transform 1 0 767 0 1 454
+box -109 -104 109 104
+<< end >>
