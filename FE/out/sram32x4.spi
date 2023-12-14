@@ -36,7 +36,7 @@ X23 Din D_ VDD VDD sky130_fd_pr__pfet_01v8 l=0.15 w=0.8
 .ends in_reg
 
 .subckt se_cell VDD VSS SAEN BL BL_ SB
-X0 net1 SAEN VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=0.8
+X0 net1 SAEN VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=0.84
 X1 diff1 BL_ net1 net1 sky130_fd_pr__nfet_01v8 l=0.15 w=0.42
 X2 diff2 BL net1 net1 sky130_fd_pr__nfet_01v8 l=0.15 w=0.42
 X3 diff1 diff1 VDD VDD sky130_fd_pr__pfet_01v8 l=0.15 w=0.42

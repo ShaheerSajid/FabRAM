@@ -85,7 +85,7 @@ def bit_cell_gen(name):
 # sense amplifier
 def sense_amp_gen(name):
     circuit = SubCircuit(name, 'VDD VSS SAEN BL BL_ SB')
-    circuit.X(0,nmos_device,'net1' ,'SAEN' ,'VSS' ,'VSS' ,    w='0.8', l='0.15')
+    circuit.X(0,nmos_device,'net1' ,'SAEN' ,'VSS' ,'VSS' ,    w='0.84', l='0.15')
     circuit.X(1,nmos_device,'diff1','BL_'  ,'net1','net1',    w='0.42', l='0.15')
     circuit.X(2,nmos_device,'diff2','BL'   ,'net1','net1',    w='0.42', l='0.15')
     circuit.X(3,pmos_device,'diff1','diff1','VDD' ,'VDD' ,    w='0.42', l='0.15')
