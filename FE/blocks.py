@@ -102,8 +102,8 @@ def sense_amp_gen(name):
     circuit.X(13,nmos_device, 'SB_w','SAEN','SB_' ,'VSS',     w='0.60',l='0.15')
     circuit.X(14,nmos_device, 'Q_','SAEN','diff2_','VSS',     w='0.60',l='0.15')
 
-    circuit.X(15,pmos_device,'SB','SB_w','VDD' ,'VDD' , w='1.6', l='0.15')
-    circuit.X(16,nmos_device,'SB','SB_w','VSS' ,'VSS' , w='1.6', l='0.15')
+    circuit.X(15,pmos_device,'SB','SB_w','VDD' ,'VDD' , w='1', l='0.15')
+    circuit.X(16,nmos_device,'SB','SB_w','VSS' ,'VSS' , w='1', l='0.15')
 
     return circuit
 

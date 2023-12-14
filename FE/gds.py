@@ -76,18 +76,17 @@ def gen_gds(mem_words, mem_bits, col_mux):
     #add cell
     mat_arr_cell.add(matarray)
 
-    # ########################################################
-    # # generate dido, mux, sense amp
-    # ########################################################
+    ########################################################
+    # generate dido, mux, sense amp
+    ########################################################
 
-    # #generate dido array
-    # dido_arr_cell = lib.new_cell(name=pchg_prefix+str(num_bits))
-    # didoarray = gdspy.CellArray(lib.cells[cellnames['dido']],
-    #                         num_bits,1,
-    #                         [lib.cells[cellnames['dido']].get_bounding_box()[1][0],
-    #                         lib.cells[cellnames['dido']].get_bounding_box()[1][1]],
-    #                         [0,0])
-    # dido_arr_cell.add(didoarray)
+    #generate dido array
+    dido_arr_cell = lib.new_cell(name=pchg_prefix+str(num_bits))
+    didoarray = gdspy.CellArray(lib.cells[cellnames['dido']],
+                            num_bits,1,
+                            cell_get_dim(lib.cells[cellnames['dido']])[1],
+                            cell_get_dim(lib.cells[cellnames['dido']])[0])
+    dido_arr_cell.add(didoarray)
 
     # #generate sense amplifier array
     # se_arr_cell = lib.new_cell(name=amp_prefix+str(mem_bits))
@@ -98,27 +97,29 @@ def gen_gds(mem_words, mem_bits, col_mux):
     #                         [0,0])
     # se_arr_cell.add(searray)
 
-    # #create horzontal lines M2
-    # #get positions of all inputs
-    # layer = "M3_pin"
-    # l_num = layers[layer][0]
+    #create horzontal lines M2
+    #get positions of all inputs
+    layer = "M2_pin"
+    l_num = layers[layer][0]
 
-    # Y_dido = 0
-    # Xs_dido = []
-    # for l in dido_arr_cell.get_labels():
-    #     if re.search("^SEL$|^DR$|^DR_$|^DW$|^DW_$",l.text) and l.layer == 133:
-    #         Y_dido = l.position[1]
-    #         Xs_dido.append(l.position[0])
-    # Xs_dido.sort()
-    # #line from first occurance to last occurance
-    # pin_order = [0, 1, 2, 3, 4]
-    # Xs_dido_split = split_lists = [Xs_dido[x:x+col_mux*len(pin_order)] for x in range(0, len(Xs_dido), col_mux*len(pin_order))]
-    # #sel, clk, saen need to go all the way
-    # p = pin_order[0]
-    # p_last = p - len(pin_order)
+    Y_dido = 0
+    Xs_dido = []
+    for l in dido_arr_cell.get_labels():
+        if re.search("^SEL$|^DR$|^DR_$|^DW$|^DW_$",l.text) and l.layer == l_num:
+            Y_dido = l.position[1]
+            Xs_dido.append(l.position[0])
+    Xs_dido.sort()
+    #line from first occurance to last occurance
+    pin_order = [0, 1, 2, 3, 4]
+    Xs_dido_split  = split_lists = [Xs_dido[x:x+col_mux*len(pin_order)] for x in range(0, len(Xs_dido), col_mux*len(pin_order))]
+    Xs_dido_chunks = [Xs_dido[i:i + len(pin_order)] for i in range(0, len(Xs_dido), len(pin_order))] 
+    #sel, clk, saen need to go all the way
+    sel_pin = 2
+    p = pin_order[sel_pin]
+    p_last = p - len(pin_order)
 
-    # mux_arr = lib.new_cell(name="mux_arr"+str(col_mux))
-    # #generate horizontal wires
+    mux_arr = lib.new_cell(name="mux_arr"+str(col_mux))
+    #generate horizontal wires
     # layer = "M2_drw"
     # via = "VIA2_drw"
     # l_w = rules[layer][0]
@@ -130,40 +131,55 @@ def gen_gds(mem_words, mem_bits, col_mux):
     # l_num = layers[layer][0]
     # l_data = layers[layer][1]
 
-    # sel_lines = gdspy.Path(width= v_encl, initial_point=(0, 0), number_of_paths=col_mux, distance=ltol_dist)
-    # sel_lines.segment(Xs_dido[p_last]-0, "+x", layer=l_num,datatype=l_data)
-    # sel_lines_width = sel_lines.get_bounding_box()[1][1]
-    # sel_lines.translate(0, -1.2*sel_lines_width)
-    # mux_arr.add(sel_lines)
-    # #generate vias
-    # layer = "M3_drw"
-    # via = "VIA2_drw"
-    # l_w = rules[layer][0]
-    # v_w = rules[via][0]
-    # v_encl = rules[via][1]
-    # l_s = rules[layer][1]
+    layer = "M3_drw"
+    l_w = rules[layer][0]
+    l_s = rules[layer][1]
+    l_num = layers[layer][0]
+    l_data = layers[layer][1]
 
-    # l_num = layers[layer][0]
-    # l_data = layers[layer][1]
+    v1_w        = rules["VIA2_drw"][0]
+    v1_encl_t   = rules["VIA2_drw"][2][0]
 
-    # v_num = layers[via][0]
-    # v_data = layers[via][1]
+    v2_w        = rules["VIA2_drw"][0]
+    v2_encl_b   = rules["VIA2_drw"][1][0]
+    #FIXME: here it should be via1_top to via2_bot
+    ltol_dist = v1_w/2 + v1_encl_t + v2_w/2 + v2_encl_b + l_s
 
-    # sel_lines_Ys = []
-    # for p in sel_lines.polygons:
-    #     sel_lines_Ys.append(p[0][1]-v_encl/2)
-    # j = 0
-    # for i in range(len(Xs_dido)):
-    #     if i % 5 == 0:    
-    #         x = Xs_dido[i]
-    #         y = sel_lines_Ys[int(j%col_mux)]
-    #         sel_lines_vert = gdspy.Path(width= l_w, initial_point=(x, Y_dido), number_of_paths=1)
-    #         sel_lines_vert.segment(Y_dido-y, "-y", layer=l_num,datatype=l_data)
-    #         mux_arr.add(sel_lines_vert)
-    #         mux_arr.add(gdspy.Rectangle((x-v_w/2, y-v_w/2), (x+v_w/2, y+v_w/2), layer=v_num, datatype=v_data))
-    #         mux_arr.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num-1, datatype=l_data))
-    #         mux_arr.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num, datatype=l_data))
-    #         j = j+1
+    sel_lines = gdspy.Path(width= l_w, initial_point=(0, 0), number_of_paths=col_mux, distance=ltol_dist)
+    sel_lines.segment(Xs_dido[p_last]-0, "+x", layer=l_num,datatype=l_data)
+    sel_lines_width = sel_lines.get_bounding_box()[1][1]
+    sel_lines.translate(0, -1.2*sel_lines_width)
+    mux_arr.add(sel_lines)
+
+    #generate vias
+    layer = "M2_drw"
+    via = "VIA2_drw"
+    l_w = rules[layer][0]
+    v_w = rules[via][0]
+    v_encl_bot = rules[via][1]
+    v_encl_top = rules[via][2]
+    l_s = rules[layer][1]
+
+    l_num = layers[layer][0]
+    l_data = layers[layer][1]
+
+    v_num = layers[via][0]
+    v_data = layers[via][1]
+
+    sel_lines_Ys = []
+    for p in sel_lines.polygons:
+        sel_lines_Ys.append(p[0][1]-rules["M3_drw"][0]/2)
+    j = 0
+    for i in range(len(Xs_dido_chunks)):   
+        x = Xs_dido_chunks[i][sel_pin]
+        y = sel_lines_Ys[int(j%col_mux)]
+        sel_lines_vert = gdspy.Path(width= l_w, initial_point=(x, Y_dido), number_of_paths=1)
+        sel_lines_vert.segment(Y_dido-y, "-y", layer=l_num,datatype=l_data)
+        mux_arr.add(sel_lines_vert)
+        mux_arr.add(gdspy.Rectangle((x-v_w/2, y-v_w/2), (x+v_w/2, y+v_w/2), layer=v_num, datatype=v_data))
+        mux_arr.add(gdspy.Rectangle((x-v_encl_bot[0]-v_w/2, y-v_encl_bot[1]-v_w/2), (x+v_encl_bot[0]+v_w/2, y+v_encl_bot[1]+v_w/2), layer=l_num, datatype=l_data))
+        mux_arr.add(gdspy.Rectangle((x-v_encl_top[0]-v_w/2, y-v_encl_top[1]-v_w/2), (x+v_encl_top[0]+v_w/2, y+v_encl_top[1]+v_w/2), layer=l_num+1, datatype=l_data))
+        j = j+1
 
     # #the rest stay within mux size
     # #get sense amplifier pins
@@ -540,10 +556,10 @@ def gen_gds(mem_words, mem_bits, col_mux):
     # cell.add(gdspy.CellReference(lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)],  [-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][0],-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][1]]))
     # #control
     # cell.add(gdspy.CellReference(ctrl_cell,  [-ctrl_cell.get_bounding_box()[1][0]-0.495,-ctrl_cell.get_bounding_box()[1][1]-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][1]]))
-    # #dido
-    # cell.add(gdspy.CellReference(dido_arr_cell, [0,-dido_arr_cell.get_bounding_box()[1][1]]))
-    # #mux_arr
-    # cell.add(gdspy.CellReference(mux_arr, [0,-dido_arr_cell.get_bounding_box()[1][1]]))
+    #dido
+    cell.add(gdspy.CellReference(dido_arr_cell, [0,-dido_arr_cell.get_bounding_box()[1][1]]))
+    #mux_arr
+    cell.add(gdspy.CellReference(mux_arr, [0,-dido_arr_cell.get_bounding_box()[1][1]]))
     # #sense amplifier
     # cell.add(gdspy.CellReference(se_arr_cell,   [0,mux_arr.get_bounding_box()[0][1]-(dido_arr_cell.get_bounding_box()[1][1] + se_arr_cell.get_bounding_box()[1][1])]))
     #write gds

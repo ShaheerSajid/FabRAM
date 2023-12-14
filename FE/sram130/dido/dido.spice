@@ -1,0 +1,37 @@
+* SPICE3 file created from dido.ext - technology: sky130A
+
+
+X9  a_8_n774# 	PCHG 		VDD 	VDD 			sky130_fd_pr__pfet_01v8 ad=0.1218 pd=1.42 as=0 ps=0 w=0.42 l=0.15
+X10 a_8_n774# 	PCHG 		VSS 	VSS 			sky130_fd_pr__nfet_01v8 ad=0.1218 pd=1.42 as=0.609025 ps=7.105 w=0.42 l=0.15
+X12 a_94_6# 	a_8_n774# 	VDD 	VDD 			sky130_fd_pr__pfet_01v8 ad=0.1218 pd=1.42 as=0 ps=0 w=0.42 l=0.15
+X11 a_94_6# 	a_8_n774# 	VSS 	VSS 			sky130_fd_pr__nfet_01v8 ad=0.1218 pd=1.42 as=0 ps=0 w=0.42 l=0.15
+
+X0 BL 		a_94_6# 	VDD 	VDD 			sky130_fd_pr__pfet_01v8 ad=0.29 pd=2.58 as=0.29 ps=2.58 w=1 l=0.15
+X4 BL_ 		a_94_6# 	VDD 	VDD 			sky130_fd_pr__pfet_01v8 ad=0 pd=0 as=0.899025 ps=9.685 w=1 l=0.15
+X8 BL_ 		a_94_6# 	BL 	VDD 			sky130_fd_pr__pfet_01v8 ad=0 pd=0 as=0.725 ps=6.74 w=1 l=0.15
+
+
+X1 BL 		a_n80_n415# 	DR 	VDD 			sky130_fd_pr__pfet_01v8 ad=0.145 pd=1.58 as=0.145 ps=1.58 w=0.5 l=0.15
+X2 BL_ 		a_n80_n415# 	DR_ 	VDD 			sky130_fd_pr__pfet_01v8 ad=0.725 pd=6.74 as=0.145 ps=1.58 w=0.5 l=0.15
+
+X3 DW 		not_0/B 	BL 	VSS 			sky130_fd_pr__nfet_01v8 ad=0.29 pd=2.58 as=0.29 ps=2.58 w=1 l=0.15
+X5 DW_ 		not_0/B 	BL_ 	VSS 			sky130_fd_pr__nfet_01v8 ad=0.29 pd=2.58 as=0.29 ps=2.58 w=1 l=0.15
+
+
+X6 not_0/B 	not_0/A 	VDD 	VDD 			sky130_fd_pr__pfet_01v8 ad=0.1218 pd=1.42 as=0.1218 ps=1.42 w=0.42 l=0.15
+X7 not_0/B 	not_0/A 	VSS 	VSS 			sky130_fd_pr__nfet_01v8 ad=0.1218 pd=1.42 as=0.1218 ps=1.42 w=0.42 l=0.15
+
+
+X14 nand2_0/A 	SEL 		VDD 	VDD 			sky130_fd_pr__pfet_01v8 ad=0.1218 pd=1.42 as=0 ps=0 w=0.42 l=0.15
+X13 nand2_0/A 	SEL 		VSS 	VSS 			sky130_fd_pr__nfet_01v8 ad=0.1218 pd=1.42 as=0 ps=0 w=0.42 l=0.15
+
+X19 not_0/A 	nand2_0/A 	VDD 	VDD 			sky130_fd_pr__pfet_01v8 ad=0.121825 pd=1.425 as=0 ps=0 w=0.42 l=0.15
+X17 not_0/A 	nand2_0/A 	VSS 	VSS 			sky130_fd_pr__nfet_01v8 ad=0.121825 pd=1.425 as=0 ps=0 w=0.42 l=0.15
+
+X15 a_n80_n415# nand2_0/A 	VDD 	VDD 			sky130_fd_pr__pfet_01v8 ad=0.1218 pd=1.42 as=0 ps=0 w=0.42 l=0.15
+X16 a_n80_n415# nand2_0/A 	VSS 	VSS 			sky130_fd_pr__nfet_01v8 ad=0.1218 pd=1.42 as=0 ps=0 w=0.42 l=0.15
+
+X18 not_0/A 	WREN 		VSS 	VSS 			sky130_fd_pr__nfet_01v8 ad=0 pd=0 as=0 ps=0 w=0.42 l=0.15
+X20 not_0/A 	WREN 		VDD 	VDD 			sky130_fd_pr__pfet_01v8 ad=0 pd=0 as=0 ps=0 w=0.42 l=0.15
+
+C0 VDD 0 3.207368f **FLOATING
