@@ -9,7 +9,8 @@ dec_2to4            dec_2to4_f
 dec_3to6            dec_3to6_f
 dido                dido_f
 in_reg              ms_ff_f
-sense_amplifier     none
+sense_amplifier     se_amp_f
+write_driver        write_driver_f
 control             none
 del_cell            none
 colum_decoder4      none

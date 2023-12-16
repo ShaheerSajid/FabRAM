@@ -88,14 +88,24 @@ def gen_gds(mem_words, mem_bits, col_mux):
                             cell_get_dim(lib.cells[cellnames['dido']])[0])
     dido_arr_cell.add(didoarray)
 
-    # #generate sense amplifier array
-    # se_arr_cell = lib.new_cell(name=amp_prefix+str(mem_bits))
-    # searray = gdspy.CellArray(lib.cells[cellnames['sense_amplifier']],
-    #                         mem_bits,1,
-    #                         [col_mux*lib.cells[cellnames['dido']].get_bounding_box()[1][0],
-    #                         lib.cells[cellnames['sense_amplifier']].get_bounding_box()[1][1]],
-    #                         [0,0])
-    # se_arr_cell.add(searray)
+    #generate sense amplifier array
+    se_arr_cell = lib.new_cell(name=amp_prefix+str(mem_bits))
+    searray = gdspy.CellArray(lib.cells[cellnames['sense_amplifier']],
+                            mem_bits,1,
+                            [col_mux*lib.cells[cellnames['dido']].get_bounding_box()[1][0],
+                            lib.cells[cellnames['sense_amplifier']].get_bounding_box()[1][1]],
+                            [0,0])
+    se_arr_cell.add(searray)
+
+
+    #generate sense amplifier array
+    wdriver_arr_cell = lib.new_cell(name="write_driver"+str(mem_bits))
+    wdarray = gdspy.CellArray(lib.cells[cellnames['write_driver']],
+                            mem_bits,1,
+                            [col_mux*lib.cells[cellnames['dido']].get_bounding_box()[1][0],
+                            lib.cells[cellnames['write_driver']].get_bounding_box()[1][1]],
+                            [0,0])
+    wdriver_arr_cell.add(wdarray)
 
     #create horzontal lines M2
     #get positions of all inputs
@@ -569,8 +579,10 @@ def gen_gds(mem_words, mem_bits, col_mux):
     cell.add(gdspy.CellReference(dido_arr_cell, [0,-dido_arr_cell.get_bounding_box()[1][1]]))
     #mux_arr
     cell.add(gdspy.CellReference(mux_arr, [0,-dido_arr_cell.get_bounding_box()[1][1]]))
-    # #sense amplifier
-    # cell.add(gdspy.CellReference(se_arr_cell,   [0,mux_arr.get_bounding_box()[0][1]-(dido_arr_cell.get_bounding_box()[1][1] + se_arr_cell.get_bounding_box()[1][1])]))
+    #sense amplifier
+    cell.add(gdspy.CellReference(se_arr_cell,   [0,mux_arr.get_bounding_box()[0][1]-(dido_arr_cell.get_bounding_box()[1][1] + se_arr_cell.get_bounding_box()[1][1])]))
+    #write driver
+    cell.add(gdspy.CellReference(wdriver_arr_cell,[0,mux_arr.get_bounding_box()[0][1]-(dido_arr_cell.get_bounding_box()[1][1] + se_arr_cell.get_bounding_box()[1][1]+ wdriver_arr_cell.get_bounding_box()[1][1])]))
     #write gds
     print("Writing out GDS file -> "+"out/"+top_name+'.gds')
     lib.write_gds("out/"+top_name+'.gds')
