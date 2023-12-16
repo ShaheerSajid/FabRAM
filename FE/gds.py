@@ -77,6 +77,16 @@ def gen_gds(mem_words, mem_bits, col_mux):
     mat_arr_cell.add(matarray)
 
     ########################################################
+    # dummy cell array
+    ########################################################
+    dmy_arr_cell = lib.new_cell(name="dmy_cell"+str(num_bits))
+    dmy_cellarray = gdspy.CellArray(lib.cells[cellnames['dummy_cell']],
+                                1,num_words,
+                                cell_get_dim(lib.cells[cellnames['dummy_cell']])[1],
+                                cell_get_dim(lib.cells[cellnames['dummy_cell']])[0])
+    #add cell
+    dmy_arr_cell.add(dmy_cellarray)
+    ########################################################
     # generate dido, mux, sense amp
     ########################################################
 
@@ -528,61 +538,41 @@ def gen_gds(mem_words, mem_bits, col_mux):
     # col decoder
 
     ########################################################################
-    #control
+    # control
     # ctrl_cell = lib.new_cell(name="ctrl_cell")
-    # ctrl_cell.add(lib.cells[cellnames['control']])
 
-    # del_arr_cell = lib.new_cell(name="del_arr_cell")
-    # delarray = gdspy.CellArray(lib.cells[cellnames['del_cell']],
-    #                             delay_val,1,
-    #                             [lib.cells[cellnames['del_cell']].get_bounding_box()[1][0],
-    #                             lib.cells[cellnames['del_cell']].get_bounding_box()[1][1]],
-    #                             [0,
-    #                             0])
-    # del_arr_cell.add(delarray)
-    # # get delay_pins
-    # Ys = []
-    # X = 0
-    # #get all As of labels
-    # for l in ctrl_cell.get_labels():
-    #     if re.search("^del|^PCHG$",l.text) and l.layer == 131:
-    #         X = l.position[0]
-    #         Ys.append(l.position[1])
-    # #sort them from biggest to smallest
-    # Ys = list(set(Ys))
-    # Ys.sort(reverse=True)
-
-    # del1 = gdspy.CellReference(del_arr_cell,  [X+0.04,Ys[0]-0.885])
-    # del2 = gdspy.CellReference(del_arr_cell,  [X+0.04,Ys[1]-0.885])
-    # del3 = gdspy.CellReference(del_arr_cell,  [X+0.04,Ys[2]-0.885])
-    # del4 = gdspy.CellReference(del_arr_cell,  [X+0.04,Ys[3]-0.885])
-
-    # ctrl_cell.add(del1)
-    # ctrl_cell.add(del2)
-    # ctrl_cell.add(del3)
-    # ctrl_cell.add(del4)
-
-    #merge
-    #matrix
+    ########################################################################
+    # merge
+    # matrix
     cell.add(gdspy.CellReference(mat_arr_cell,  [0,0]))
+    # dummy
+    cell.add(gdspy.CellReference(dmy_arr_cell,  [-(dmy_arr_cell.get_bounding_box()[1][0]),0]))
     #row_decoder
-    cell.add(gdspy.CellReference(row_dec_cell,  [-(row_dec_cell.get_bounding_box()[1][0]+row_driver_arr_cell.get_bounding_box()[1][0]),0]))#WL label position
+    cell.add(gdspy.CellReference(row_dec_cell,  [-(row_dec_cell.get_bounding_box()[1][0]
+                                                   +row_driver_arr_cell.get_bounding_box()[1][0]
+                                                   +dmy_arr_cell.get_bounding_box()[1][0]),0]))#WL label position
     #row driver
-    cell.add(gdspy.CellReference(row_driver_arr_cell,  [-(row_driver_arr_cell.get_bounding_box()[1][0]),0]))
+    cell.add(gdspy.CellReference(row_driver_arr_cell,  [-(row_driver_arr_cell.get_bounding_box()[1][0]
+                                                          +dmy_arr_cell.get_bounding_box()[1][0]),0]))
     # address reg
-    cell.add(gdspy.CellReference(addr_reg_cell,  [-(row_dec_cell.get_bounding_box()[1][0]+row_driver_arr_cell.get_bounding_box()[1][0]),0]))
-    # #col decoder
+    cell.add(gdspy.CellReference(addr_reg_cell,  [-(row_dec_cell.get_bounding_box()[1][0]
+                                                    +row_driver_arr_cell.get_bounding_box()[1][0]
+                                                    +dmy_arr_cell.get_bounding_box()[1][0]),0]))
+    # col decoder
     # cell.add(gdspy.CellReference(lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)],  [-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][0],-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][1]]))
-    # #control
+    # control
     # cell.add(gdspy.CellReference(ctrl_cell,  [-ctrl_cell.get_bounding_box()[1][0]-0.495,-ctrl_cell.get_bounding_box()[1][1]-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][1]]))
-    #dido
+    # dido
     cell.add(gdspy.CellReference(dido_arr_cell, [0,-dido_arr_cell.get_bounding_box()[1][1]]))
-    #mux_arr
+    # mux_arr
     cell.add(gdspy.CellReference(mux_arr, [0,-dido_arr_cell.get_bounding_box()[1][1]]))
-    #sense amplifier
-    cell.add(gdspy.CellReference(se_arr_cell,   [0,mux_arr.get_bounding_box()[0][1]-(dido_arr_cell.get_bounding_box()[1][1] + se_arr_cell.get_bounding_box()[1][1])]))
-    #write driver
-    cell.add(gdspy.CellReference(wdriver_arr_cell,[0,mux_arr.get_bounding_box()[0][1]-(dido_arr_cell.get_bounding_box()[1][1] + se_arr_cell.get_bounding_box()[1][1]+ wdriver_arr_cell.get_bounding_box()[1][1])]))
+    # sense amplifier
+    cell.add(gdspy.CellReference(se_arr_cell,   [0,mux_arr.get_bounding_box()[0][1]-(dido_arr_cell.get_bounding_box()[1][1] 
+                                                                                     +se_arr_cell.get_bounding_box()[1][1])]))
+    # write driver
+    cell.add(gdspy.CellReference(wdriver_arr_cell,[0,mux_arr.get_bounding_box()[0][1]-(dido_arr_cell.get_bounding_box()[1][1] 
+                                                                                       +se_arr_cell.get_bounding_box()[1][1]
+                                                                                       +wdriver_arr_cell.get_bounding_box()[1][1])]))
     #write gds
     print("Writing out GDS file -> "+"out/"+top_name+'.gds')
     lib.write_gds("out/"+top_name+'.gds')

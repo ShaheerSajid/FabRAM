@@ -1,0 +1,8 @@
+magic
+tech sky130A
+timestamp 1702733022
+use bit_cell_f  bit_cell_f_0 ~/Desktop/FabRAM/FE/sram130/bit_cell
+timestamp 1702386302
+transform 1 0 0 0 1 0
+box 0 0 360 348
+<< end >>
