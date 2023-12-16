@@ -2,7 +2,7 @@
 .include /home/shaheer/Desktop/FabRAM/FE/out/sram32x4.spi
 .lib /usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
-      .tran 0.01183545n 23.670900000000003n 11.835450000000002n
+      .tran 0.011648450000000001n 23.2969n 11.64845n
       .control
       set hcopydevtype = svg
       run
@@ -11,16 +11,16 @@
       meas tran tdiff_cell_fall TRIG v(clk) VAL=0.9 RISE=2 TARG v(Q0) VAL=0.9 FALL=1 
       meas tran tdiff_tran_fall TRIG v(Q0)  VAL=1.62 FALL=1 TARG v(Q0) VAL=0.18000000000000002 FALL=1 
 
-      echo "$&tdiff_cell_rise,$&tdiff_tran_rise $&tdiff_cell_fall,$&tdiff_tran_fall" > log/sim_0.36709_0.03296.text
-      hardcopy log/sim_0.36709_0.03296.svg v(clk) v(Q0) v(x0.PCHG) v(x0.WLEN) v(x0.SAEN) v(x0.x8.RSTP)
+      echo "$&tdiff_cell_rise,$&tdiff_tran_rise $&tdiff_cell_fall,$&tdiff_tran_fall" > log/sim_0.32969_0.03458.text
+      hardcopy log/sim_0.32969_0.03458.svg v(clk) v(Q0) v(x0.PCHG) v(x0.WLEN) v(x0.SAEN) v(x0.x8.RSTP)
       exit
       .endc
       
 Vpower VDD 0 1.8
 Vgnd VSS 0 0
-Vclk clk VSS DC 0V PULSE(0V 1.8V 0ns 0.4588625ns 0.4588625ns 2.5ns 5.917725000000001ns)
-Vaddr addr VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 2.5ns 11.835450000000002ns)
-Vdin din VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 2.5ns 11.835450000000002ns)
-Vwrite write VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 11.835450000000002ns 23.670900000000003ns)
+Vclk clk VSS DC 0V PULSE(0V 1.8V 0ns 0.41211249999999994ns 0.41211249999999994ns 2.5ns 5.824225ns)
+Vaddr addr VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 2.5ns 11.64845ns)
+Vdin din VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 2.5ns 11.64845ns)
+Vwrite write VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 11.64845ns 23.2969ns)
 X0 VDD VSS clk addr addr addr addr addr din din din din Q0 Q1 Q2 Q3 write sram32x4
-C0 Q0 VSS 0.03296p
+C0 Q0 VSS 0.03458p

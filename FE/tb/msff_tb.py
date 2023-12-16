@@ -29,7 +29,7 @@ simulation_steps = 2000
 
 models_lib = "/usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice"
 models_corner = "tt"
-sram_netlist = "/home/shaheer/Desktop/mc_final/FE/out/sram32x4.spi"
+sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram32x4.spi"
 
 period = 3
 steps = simulation_steps

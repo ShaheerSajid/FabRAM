@@ -1,7 +1,7 @@
 magic
 tech sky130A
 magscale 1 2
-timestamp 1702568184
+timestamp 1702653557
 << nwell >>
 rect 306 -338 339 -130
 rect 0 -425 339 -338
@@ -157,15 +157,15 @@ rect 628 -425 680 -362
 rect 739 -931 791 638
 rect 739 -993 791 -983
 use bit_cell  bit_cell_0 ~/Desktop/FabRAM/FE/sram130/bit_cell
-timestamp 1702297211
+timestamp 1702653557
 transform 1 0 0 0 1 -1121
 box 0 0 720 696
 use sky130_fd_pr__nfet_01v8_A6LSUL  m1
-timestamp 1702552054
+timestamp 1702653557
 transform -1 0 109 0 1 -19
 box -73 -68 73 68
 use sky130_fd_pr__nfet_01v8_A6LSUL  m2
-timestamp 1702552054
+timestamp 1702653557
 transform 1 0 197 0 1 -19
 box -73 -68 73 68
 use sky130_fd_pr__pfet_01v8_4Y88KP#0  m3

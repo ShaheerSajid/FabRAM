@@ -110,34 +110,41 @@ def sense_amp_gen(name):
 # master slave flip flop
 def ms_reg_gen(name):
     circuit = SubCircuit(name, 'VDD VSS clk D Q')
-    circuit.X(0 ,nmos_device,'net3','clk' ,'VSS' ,'VSS',  l='0.15',w='0.8')
-    circuit.X(1 ,nmos_device,'net4','net2','net5','VSS',  l='0.15',w='0.8') 
+    circuit.X(0 ,nmos_device,'net3','clk' ,'VSS' ,'VSS',  l='0.15',w='0.42')
+    circuit.X(8 ,pmos_device,'net3','clk' ,'VDD' ,'VDD',  l='0.15',w='0.42') 
+
+    circuit.X(1 ,nmos_device,'net4','net2','net5','VSS',  l='0.15',w='0.42') 
+    circuit.X(10,pmos_device,'Din' ,'net2','net1','VDD',  l='0.15',w='0.42') 
+
     circuit.X(2 ,nmos_device,'net55','Q' ,'VSS' ,'VSS',   l='0.15',w='0.42') 
-    circuit.X(3 ,nmos_device,'net2','net3','VSS' ,'VSS',  l='0.15',w='0.8') 
-    circuit.X(4 ,nmos_device, 'Q' ,'net5','VSS' ,'VSS',   l='0.15',w='0.8') 
-    circuit.X(5 ,nmos_device,'Din'  ,'net3','net1','VSS', l='0.15',w='0.8') 
-    circuit.X(6 ,nmos_device,'net11','net4','VSS' ,'VSS', l='0.15',w='0.42') 
-    circuit.X(7 ,nmos_device,'net4','net1','VSS' ,'VSS',  l='0.15',w='0.8') 
-    circuit.X(8 ,pmos_device,'net3','clk' ,'VDD' ,'VDD',  l='0.15',w='0.8') 
-    circuit.X(9 ,pmos_device,'Q' ,'net5','VDD' ,'VDD',    l='0.15',w='0.8') 
-    circuit.X(10,pmos_device,'Din'  ,'net2','net1','VDD', l='0.15',w='0.8') 
-    circuit.X(11,pmos_device,'net2','net3','VDD' ,'VDD',  l='0.15',w='0.8') 
-    circuit.X(12,pmos_device,'net11','net4','VDD' ,'VDD', l='0.15',w='0.42') 
     circuit.X(13,pmos_device,'net55','Q' ,'VDD' ,'VDD',   l='0.15',w='0.42') 
-    circuit.X(14,pmos_device,'net4','net1','VDD' ,'VDD',  l='0.15',w='0.8') 
-    circuit.X(15,pmos_device,'net4','net3','net5','VDD',  l='0.15',w='0.8') 
 
-    circuit.X(16 ,nmos_device,'net11'  ,'net2','net1','VSS',   l='0.15',w='0.8')
-    circuit.X(17 ,pmos_device,'net11'  ,'net3','net1','VDD',   l='0.15',w='0.8')
+    circuit.X(3 ,nmos_device,'net2','net3','VSS' ,'VSS',  l='0.15',w='0.42')
+    circuit.X(11,pmos_device,'net2','net3','VDD' ,'VDD',  l='0.15',w='0.42')
 
-    circuit.X(18 ,nmos_device,'net55'  ,'net3','net5','VSS',   l='0.15',w='0.8')
-    circuit.X(19 ,pmos_device,'net55'  ,'net2','net5','VDD',   l='0.15',w='0.8')
+    circuit.X(5 ,nmos_device,'Din' ,'net3','net1','VSS',  l='0.15',w='0.42') 
+    circuit.X(15,pmos_device,'net4','net3','net5','VDD',  l='0.15',w='0.42')  
+
+    circuit.X(4 ,nmos_device,'Q' ,'net5','VSS' ,'VSS',    l='0.15',w='0.42')
+    circuit.X(9 ,pmos_device,'Q' ,'net5','VDD' ,'VDD',    l='0.15',w='0.42') 
+    
+    circuit.X(6 ,nmos_device,'net11','net4','VSS' ,'VSS', l='0.15',w='0.42') 
+    circuit.X(12,pmos_device,'net11','net4','VDD' ,'VDD', l='0.15',w='0.42') 
+
+    circuit.X(7 ,nmos_device,'net4','net1','VSS' ,'VSS',  l='0.15',w='0.42') 
+    circuit.X(14,pmos_device,'net4','net1','VDD' ,'VDD',  l='0.15',w='0.42')
+    
+    circuit.X(16 ,nmos_device,'net11'  ,'net2','net1','VSS',   l='0.15',w='0.42')
+    circuit.X(17 ,pmos_device,'net11'  ,'net3','net1','VDD',   l='0.15',w='0.42')
+
+    circuit.X(18 ,nmos_device,'net55'  ,'net3','net5','VSS',   l='0.15',w='0.42')
+    circuit.X(19 ,pmos_device,'net55'  ,'net2','net5','VDD',   l='0.15',w='0.42')
 
     circuit.X(20 ,nmos_device,'D_'  ,'D','VSS','VSS',   l='0.15',w='0.42')
     circuit.X(21 ,pmos_device,'D_'  ,'D','VDD','VDD',   l='0.15',w='0.42')
 
-    circuit.X(22 ,nmos_device,'Din'  ,'D_','VSS','VSS',   l='0.15',w='0.8')
-    circuit.X(23 ,pmos_device,'Din'  ,'D_','VDD','VDD',   l='0.15',w='0.8')
+    circuit.X(22 ,nmos_device,'Din'  ,'D_','VSS','VSS',   l='0.15',w='0.42')
+    circuit.X(23 ,pmos_device,'Din'  ,'D_','VDD','VDD',   l='0.15',w='0.42')
               
     return circuit
 

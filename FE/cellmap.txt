@@ -8,7 +8,7 @@ nand4               none
 dec_2to4            dec_2to4_f
 dec_3to6            dec_3to6_f
 dido                dido_f
-in_reg              none
+in_reg              ms_ff_f
 sense_amplifier     none
 control             none
 del_cell            none

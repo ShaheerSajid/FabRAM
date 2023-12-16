@@ -484,34 +484,41 @@ def gen_gds(mem_words, mem_bits, col_mux):
                             cell_get_dim(lib.cells[cellnames['row_driver']])[0])
     row_driver_arr_cell.add(row_driver_array)
 
-    # #######################
-    # # input reg col
-    # #######################
+    #######################
+    # input reg col
+    #######################
 
-    # Ys = []
-    # X = 0
-    # #get all As of labels
-    # for l in row_dec_cell.get_labels():
-    #     if re.search("^A[\d]+$",l.text) and l.layer == 133:
-    #         X = l.position[0]
-    #         Ys.append(l.position[1])
-    # #sort them from biggest to smallest
-    # Ys = list(set(Ys))
-    # Ys.sort(reverse=True)
+    layer = "M1_pin"
+    l_num = layers[layer][0]
+    l_w = rules["M1_drw"][0]
+    Ys = []
+    X = 0
+    #get all As of labels
+    for l in row_dec_cell.get_labels():
+        if re.search("^A[\d]+$",l.text) and l.layer == l_num:
+            X = l.position[0]
+            Ys.append(l.position[1])
+    #sort them from biggest to smallest
+    Ys = list(set(Ys))
+    Ys.sort(reverse=True)
 
-    # gate = cellnames['in_reg']
-    # in_reg_array = gdspy.CellArray(lib.cells[gate],
-    #                             1,int(row_bits),
-    #                             [lib.cells[gate].get_bounding_box()[1][0],
-    #                             lib.cells[gate].get_bounding_box()[1][1]],
-    #                             [0,
-    #                             0])
+    addr_reg_cell = lib.new_cell(name="addr_reg")
+    gate = cellnames['in_reg']
 
-    # ########################################################################
-    # # col decoder
+    # get d position
+    for l in lib.cells[gate].get_labels():
+        if re.search("^q$",l.text) and l.layer == l_num:
+            Y_q = l.position[1]
 
-    # ########################################################################
-    # #control
+    for i in range(int(row_bits)):
+        reg_cell = gdspy.CellReference(lib.cells[gate],  [X-cell_get_dim(lib.cells[gate])[1][0]-l_w/2,Ys[i]-Y_q])
+        addr_reg_cell.add(reg_cell)
+
+    ########################################################################
+    # col decoder
+
+    ########################################################################
+    #control
     # ctrl_cell = lib.new_cell(name="ctrl_cell")
     # ctrl_cell.add(lib.cells[cellnames['control']])
 
@@ -552,6 +559,8 @@ def gen_gds(mem_words, mem_bits, col_mux):
     cell.add(gdspy.CellReference(row_dec_cell,  [-(row_dec_cell.get_bounding_box()[1][0]+row_driver_arr_cell.get_bounding_box()[1][0]),0]))#WL label position
     #row driver
     cell.add(gdspy.CellReference(row_driver_arr_cell,  [-(row_driver_arr_cell.get_bounding_box()[1][0]),0]))
+    # address reg
+    cell.add(gdspy.CellReference(addr_reg_cell,  [-(row_dec_cell.get_bounding_box()[1][0]+row_driver_arr_cell.get_bounding_box()[1][0]),0]))
     # #col decoder
     # cell.add(gdspy.CellReference(lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)],  [-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][0],-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][1]]))
     # #control

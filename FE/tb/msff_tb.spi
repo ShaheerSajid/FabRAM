@@ -1,0 +1,15 @@
+.title characterizer
+.include /home/shaheer/Desktop/FabRAM/FE/out/sram32x4.spi
+.lib /usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+.tran 0.012u 24.0u
+.control
+set hcopydevtype = svg
+run
+plot v(clk) v(D) v(Q)
+.endc
+Vpower VDD 0 1.8
+Vgnd VSS 0 0
+Vclk clk VSS DC 0V PULSE(1.8V 0V 0n 1p 1p 1u 3u)
+Vd D VSS DC 0V PULSE(1.8V 0V 17n 1p 1p 333n 777n)
+X0 VDD VSS clk D Q in_reg
