@@ -348,7 +348,7 @@ def gen_spice(mem_words, mem_bits, col_mux):
     #create array
     dido_arr  = dido_array_gen(num_bits, dido.name)
     circuit.subcircuit(dido_arr)
-    delay_val = 4
+    delay_val = 10
     input_reg_arr   = input_block_gen('input_reg', math.ceil((addr_bits)) + 1,in_reg.name)
     # din reg
     datain_reg_arr  = data_write_arr_gen('datain_reg', mem_bits, in_reg.name)

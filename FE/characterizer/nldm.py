@@ -195,17 +195,7 @@ def run_sim_output_characterizer(simulation_params):
     dout_ports = ''
     for i in range(mem_bits):
         dout_ports += ' Q'+str(i)
-    port_str = power["name"] 
-    + ' ' 
-    + ground["name"] 
-    + ' clk' 
-    + addr_ports 
-    + din_ports 
-    + dout_ports 
-    + ' write ' 
-    + power["name"] 
-    + ' ' 
-    + sram_cell
+    port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + din_ports + dout_ports + ' write ' + power["name"] + ' ' + sram_cell
 
     sim_circuit.X(0, port_str)
     #set cap
@@ -581,20 +571,7 @@ def run_sim_leakage_characterizer():
   dout_ports = ''
   for i in range(mem_bits):
       dout_ports += ' Q'+str(i)
-  port_str = power["name"] 
-  + ' ' 
-  + ground["name"] 
-  + ' '
-  + ground["name"] 
-  + addr_ports 
-  + din_ports 
-  + dout_ports 
-  + ' '
-  +ground["name"]
-  +' ' 
-  +ground["name"]
-  +' ' 
-  + sram_cell
+  port_str = power["name"] + ' ' + ground["name"] + ' '+ ground["name"] + addr_ports + din_ports + dout_ports + ' '+ground["name"]+' ' +ground["name"]+' ' + sram_cell
   
   sim_circuit.X(0, port_str)
   
@@ -699,20 +676,7 @@ def run_sim_inputpwr_characterizer(simulation_params, clk=False):
     dout_ports = ''
     for i in range(mem_bits):
         dout_ports += ' Q'+str(i)
-    port_str = power["name"] 
-    + ' ' 
-    + ground["name"] 
-    + ' clk' 
-    + addr_ports 
-    + din_ports 
-    + dout_ports 
-    + ' '
-    +ground["name"]
-    +' ' 
-    + ' ' 
-    + power["name"] 
-    + ' ' 
-    + sram_cell
+    port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + din_ports + dout_ports + ' '+ground["name"]+' ' + ' ' + power["name"] + ' ' + sram_cell
 
     sim_circuit.X(0, port_str)
   else:
@@ -727,21 +691,7 @@ def run_sim_inputpwr_characterizer(simulation_params, clk=False):
     dout_ports = ''
     for i in range(mem_bits):
         dout_ports += ' Q'+str(i)
-    port_str = power["name"] 
-    + ' ' 
-    + ground["name"] 
-    + ' ' 
-    + ground["name"] 
-    + ' clk' 
-    + addr_ports 
-    + din_ports 
-    + dout_ports 
-    + ' '
-    +ground["name"]
-    +' ' 
-    + power["name"] 
-    + ' ' 
-    + sram_cell
+    port_str = power["name"] + ' ' + ground["name"] + ' ' + ground["name"] + ' clk' + addr_ports + din_ports + dout_ports + ' '+ground["name"]+' ' + power["name"] + ' ' + sram_cell
 
     sim_circuit.X(0, port_str)
   
@@ -877,18 +827,7 @@ def run_sim_outputpwr_characterizer(simulation_params):
   dout_ports = ''
   for i in range(mem_bits):
       dout_ports += ' Q'+str(i)
-  port_str = power["name"] 
-  + ' ' 
-  + ground["name"] 
-  + ' clk' 
-  + addr_ports 
-  + ' addr din' 
-  + din_ports 
-  + dout_ports 
-  + ' write' 
-  + power["name"] 
-  + ' ' 
-  +sram_cell
+  port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + ' addr din' + din_ports + dout_ports + ' write' + power["name"] + ' ' +sram_cell
 
   sim_circuit.X(0, port_str)
 
@@ -1034,18 +973,7 @@ def run_sim_rwpwr_characterizer(simulation_params):
   dout_ports = ''
   for i in range(mem_bits):
       dout_ports += ' Q'+str(i)
-  port_str = power["name"] 
-  + ' ' 
-  + ground["name"] 
-  + ' clk' 
-  + addr_ports 
-  + ' addr din' 
-  + din_ports 
-  + dout_ports 
-  + ' write' 
-  + power["name"] 
-  + ' ' 
-  +sram_cell
+  port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + ' addr din' + din_ports + dout_ports + ' write' + power["name"] + ' ' +sram_cell
 
   sim_circuit.X(0, port_str)
 
@@ -1088,9 +1016,9 @@ out_tr = []
 out_slew = []
 out_tr_fall = []
 out_slew_fall = []
-# run_sim_output_characterizer(simulation_params[0])
+run_sim_output_characterizer(simulation_params[0])
 # print(run_sim_leakage_characterizer())
-# exit()
+exit()
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
     executor.map(run_sim_output_characterizer, simulation_params)
 

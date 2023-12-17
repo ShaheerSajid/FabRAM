@@ -214,14 +214,13 @@ def self_timed_ctrl(name, del_cell_name, not_name, nand2_name, nand3_name):
     ctrl.X(12 ,pmos_device,'DBL'  ,'PCHG','VDD','VDD', l='0.15',w='0.42') 
 
     # word-line on if chipselect
-    ctrl.X(13, nand2_name, 'VDD', 'VSS', 'cs', 'WLENP', 'WLENPP')
-    ctrl.X(14 ,pmos_device,'WLEN','WLENPP','VDD','VDD',  l='0.15',w='1' )
-    ctrl.X(15 ,nmos_device,'WLEN','WLENPP','VSS','VSS',  l='0.15',w='1' )
+    ctrl.X(13, nand2_name,  'VDD', 'VSS', 'cs', 'WLENP', 'WLENPP')
+    ctrl.X(14, not_name,    'VDD', 'VSS', 'WLENPP', 'WLEN')
 
     # turn on sense amplifier if cs
-    ctrl.X(16, not_name,    'VDD', 'VSS', 'DBL_', 'RBL')
-    ctrl.X(17, nand3_name,  'VDD', 'VSS', 'cs' ,'WLEN', 'RBL', 'SAEN_')
-    ctrl.X(18, not_name,    'VDD', 'VSS', 'SAEN_', 'SAEN')
+    ctrl.X(15, not_name,    'VDD', 'VSS', 'DBL_', 'RBL')
+    ctrl.X(16, nand3_name,  'VDD', 'VSS', 'cs' ,'WLEN', 'RBL', 'SAEN_')
+    ctrl.X(17, not_name,    'VDD', 'VSS', 'SAEN_', 'SAEN')
 
     #turn on rst
     #reset on negedge
