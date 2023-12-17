@@ -539,7 +539,23 @@ def gen_gds(mem_words, mem_bits, col_mux):
 
     ########################################################################
     # control
-    # ctrl_cell = lib.new_cell(name="ctrl_cell")
+    ctrl_cell = lib.new_cell(name="ctrl_cell")
+    ctrl_cell.add(lib.cells[cellnames['control']])
+
+    layer = "M1_pin"
+    l_num = layers[layer][0]
+    l_w = rules["M1_drw"][0]
+    Ys = []
+    X = 0
+    #get all As of labels
+    for l in ctrl_cell.get_labels():
+        if re.search("^cs$|^WREN$",l.text) and l.layer == l_num:
+            X = l.position[0]
+            Ys.append(l.position[1])
+    gate = cellnames['in_reg']
+    for i in range(2):
+        reg_cell = gdspy.CellReference(lib.cells[gate],  [X-cell_get_dim(lib.cells[gate])[1][0]-l_w/2,Ys[i]-Y_q])
+        ctrl_cell.add(reg_cell)
 
     ########################################################################
     # merge
@@ -561,7 +577,7 @@ def gen_gds(mem_words, mem_bits, col_mux):
     # col decoder
     # cell.add(gdspy.CellReference(lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)],  [-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][0],-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][1]]))
     # control
-    # cell.add(gdspy.CellReference(ctrl_cell,  [-ctrl_cell.get_bounding_box()[1][0]-0.495,-ctrl_cell.get_bounding_box()[1][1]-lib.cells["cd"+str(col_mux)+"col_dec"+str(col_mux)].get_bounding_box()[1][1]]))
+    cell.add(gdspy.CellReference(ctrl_cell,  [-ctrl_cell.get_bounding_box()[1][0],-ctrl_cell.get_bounding_box()[1][1]]))
     # dido
     cell.add(gdspy.CellReference(dido_arr_cell, [0,-dido_arr_cell.get_bounding_box()[1][1]]))
     # mux_arr

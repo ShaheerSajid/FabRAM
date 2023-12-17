@@ -12,7 +12,7 @@ dido                dido_f
 in_reg              ms_ff_f
 sense_amplifier     se_amp_f
 write_driver        write_driver_f
-control             none
+control             control_f
 del_cell            none
 colum_decoder4      none
 colum_decoder8      none

@@ -1,7 +1,7 @@
 magic
 tech sky130A
 magscale 1 2
-timestamp 1702521001
+timestamp 1702829353
 << poly >>
 rect 94 471 124 477
 rect 44 455 124 471
@@ -41,9 +41,8 @@ rect 48 310 106 316
 rect 0 276 60 310
 rect 94 276 106 310
 rect 48 270 106 276
-rect 136 238 170 363
+rect 224 238 258 363
 rect 48 125 82 154
-rect 224 125 258 154
 rect 0 91 306 125
 use sky130_fd_pr__nfet_01v8_A6LSUL  m1 ~/Desktop/FabRAM/FE/sram130/common
 timestamp 1702483205
@@ -51,7 +50,7 @@ transform 1 0 109 0 1 196
 box -73 -68 73 68
 use sky130_fd_pr__nfet_01v8_A6LSUL  m2
 timestamp 1702483205
-transform -1 0 197 0 1 196
+transform 1 0 197 0 1 196
 box -73 -68 73 68
 use sky130_fd_pr__pfet_01v8_4Y88KP  m3 ~/Desktop/FabRAM/FE/sram130/common
 timestamp 1702483205

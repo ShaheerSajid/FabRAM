@@ -1,7 +1,7 @@
 magic
 tech sky130A
 magscale 1 2
-timestamp 1702809649
+timestamp 1702826916
 << nwell >>
 rect -166 349 -73 557
 << nmos >>
@@ -326,11 +326,11 @@ timestamp 1702809649
 transform 1 0 1565 0 1 453
 box -109 -104 109 104
 use nand2_f  nand2_f_0 ~/Desktop/FabRAM/FE/sram130/nand2
-timestamp 1702393006
+timestamp 1702826916
 transform 1 0 1674 0 1 -139
 box 0 138 306 696
 use not_f  not_f_0 ~/Desktop/FabRAM/FE/sram130/not
-timestamp 1702392485
+timestamp 1702826916
 transform 1 0 1980 0 1 -139
 box 0 138 330 696
 << end >>
