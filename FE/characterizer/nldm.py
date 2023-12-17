@@ -171,7 +171,7 @@ def run_sim_output_characterizer(simulation_params):
       meas tran tdiff_tran_fall TRIG v(Q0)  VAL={h_thresh} FALL=1 TARG v(Q0) VAL={l_thresh} FALL=1 
 
       echo "$&tdiff_cell_rise,$&tdiff_tran_rise $&tdiff_cell_fall,$&tdiff_tran_fall" > {outfile}.text
-      hardcopy {outfile}.svg v(clk) v(Q0) v(x0.PCHG) v(x0.WLEN) v(x0.SAEN) v(x0.x8.RSTP)
+      hardcopy {outfile}.svg v(clk)+9.0 v(Q0)+7.2 v(x0.PCHG)+5.4 v(x0.WLEN)+3.6 v(x0.SAEN)+1.8 v(x0.WREN)
       exit
       .endc
       """.format(step=str(time_step)+time_unit, 
@@ -195,7 +195,17 @@ def run_sim_output_characterizer(simulation_params):
     dout_ports = ''
     for i in range(mem_bits):
         dout_ports += ' Q'+str(i)
-    port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + din_ports + dout_ports + ' write ' + sram_cell
+    port_str = power["name"] 
+    + ' ' 
+    + ground["name"] 
+    + ' clk' 
+    + addr_ports 
+    + din_ports 
+    + dout_ports 
+    + ' write ' 
+    + power["name"] 
+    + ' ' 
+    + sram_cell
 
     sim_circuit.X(0, port_str)
     #set cap
@@ -532,7 +542,7 @@ def run_sim_leakage_characterizer():
   sim_circuit.V('gnd', ground["name"],ground["value"],ground["value"])
 
   steps = simulation_steps
-  start_time = 0.5
+  start_time = 2
   max_time = 5
   time_interval = (max_time - start_time)*1e-9
   time_step = max_time/steps
@@ -544,7 +554,6 @@ def run_sim_leakage_characterizer():
   elif(simulator == "ngspice"):
     sim_str = """
     .tran {step} {max} {savetime}
-    .nodeset all = 0
     .control
     set hcopydevtype = svg
     run
@@ -572,7 +581,20 @@ def run_sim_leakage_characterizer():
   dout_ports = ''
   for i in range(mem_bits):
       dout_ports += ' Q'+str(i)
-  port_str = power["name"] + ' ' + ground["name"] + ' '+ ground["name"] + addr_ports + din_ports + dout_ports + ' '+ground["name"]+' ' + sram_cell
+  port_str = power["name"] 
+  + ' ' 
+  + ground["name"] 
+  + ' '
+  + ground["name"] 
+  + addr_ports 
+  + din_ports 
+  + dout_ports 
+  + ' '
+  +ground["name"]
+  +' ' 
+  +ground["name"]
+  +' ' 
+  + sram_cell
   
   sim_circuit.X(0, port_str)
   
@@ -677,7 +699,20 @@ def run_sim_inputpwr_characterizer(simulation_params, clk=False):
     dout_ports = ''
     for i in range(mem_bits):
         dout_ports += ' Q'+str(i)
-    port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + din_ports + dout_ports + ' '+ground["name"]+' ' + sram_cell
+    port_str = power["name"] 
+    + ' ' 
+    + ground["name"] 
+    + ' clk' 
+    + addr_ports 
+    + din_ports 
+    + dout_ports 
+    + ' '
+    +ground["name"]
+    +' ' 
+    + ' ' 
+    + power["name"] 
+    + ' ' 
+    + sram_cell
 
     sim_circuit.X(0, port_str)
   else:
@@ -692,7 +727,21 @@ def run_sim_inputpwr_characterizer(simulation_params, clk=False):
     dout_ports = ''
     for i in range(mem_bits):
         dout_ports += ' Q'+str(i)
-    port_str = power["name"] + ' ' + ground["name"] + ' ' + ground["name"] + ' clk' + addr_ports + din_ports + dout_ports + ' '+ground["name"]+' ' + sram_cell
+    port_str = power["name"] 
+    + ' ' 
+    + ground["name"] 
+    + ' ' 
+    + ground["name"] 
+    + ' clk' 
+    + addr_ports 
+    + din_ports 
+    + dout_ports 
+    + ' '
+    +ground["name"]
+    +' ' 
+    + power["name"] 
+    + ' ' 
+    + sram_cell
 
     sim_circuit.X(0, port_str)
   
@@ -828,7 +877,18 @@ def run_sim_outputpwr_characterizer(simulation_params):
   dout_ports = ''
   for i in range(mem_bits):
       dout_ports += ' Q'+str(i)
-  port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + ' addr din' + din_ports + dout_ports + ' write ' + sram_cell
+  port_str = power["name"] 
+  + ' ' 
+  + ground["name"] 
+  + ' clk' 
+  + addr_ports 
+  + ' addr din' 
+  + din_ports 
+  + dout_ports 
+  + ' write' 
+  + power["name"] 
+  + ' ' 
+  +sram_cell
 
   sim_circuit.X(0, port_str)
 
@@ -926,7 +986,6 @@ def run_sim_rwpwr_characterizer(simulation_params):
   elif(simulator == "ngspice"):
     sim_str = """
     .tran {step} {max} {savetime}
-    .nodeset all = 0
     .control
     set hcopydevtype = svg
     run
@@ -975,7 +1034,18 @@ def run_sim_rwpwr_characterizer(simulation_params):
   dout_ports = ''
   for i in range(mem_bits):
       dout_ports += ' Q'+str(i)
-  port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + ' addr din' + din_ports + dout_ports + ' write ' + sram_cell
+  port_str = power["name"] 
+  + ' ' 
+  + ground["name"] 
+  + ' clk' 
+  + addr_ports 
+  + ' addr din' 
+  + din_ports 
+  + dout_ports 
+  + ' write' 
+  + power["name"] 
+  + ' ' 
+  +sram_cell
 
   sim_circuit.X(0, port_str)
 
@@ -1018,8 +1088,9 @@ out_tr = []
 out_slew = []
 out_tr_fall = []
 out_slew_fall = []
-run_sim_output_characterizer(simulation_params[0])
-exit()
+# run_sim_output_characterizer(simulation_params[0])
+# print(run_sim_leakage_characterizer())
+# exit()
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
     executor.map(run_sim_output_characterizer, simulation_params)
 

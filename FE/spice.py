@@ -17,6 +17,7 @@ from PySpice.Unit import *
 
 #array names
 cell_prefix     = "bit_arr_"
+dmycell_prefix  = "dmy_arr_"
 mat_prefix      = "mat_arr_"
 amp_prefix      = "se_arr_"
 pchg_prefix     = "pchg_arr_"
@@ -24,6 +25,18 @@ dec_prefix      = "dec_arr_"
 col_dec_prefix  = "cdec_arr_"
 dido_prefix     = "dido_arr_"
 rd_prefix       = "rd_arr_"
+
+# bit cell row generation
+def dmy_array_gen(words, dmy_cell_name):
+    nodes = 'VDD VSS'
+    for i in range(words):
+        nodes += ' WL'+str(i)
+    nodes += ' DBL DBL_'
+    circuit = SubCircuit(dmycell_prefix+str(words), nodes)
+    for i in range(words):
+        circuit.X(str(i), dmy_cell_name,'VDD','VSS','WL'+str(i),'DBL','DBL_')
+    return circuit
+
 
 # bit cell row generation
 def sram_array_gen(len, bit_cell_name):
@@ -261,17 +274,22 @@ def gen_spice(mem_words, mem_bits, col_mux):
     circuit = Circuit("sram_gen")
     #bit cell
     bit_Cell    = blocks.bit_cell_gen('bit_cell')
+    #dmy cell
+    dmy_Cell    = blocks.dmy_cell_gen('dmy_cell')
     #in_reg cell
     in_reg      = blocks.ms_reg_gen('in_reg')
     #se cell
     se_cell     = blocks.sense_amp_gen('se_cell')
 
     circuit.subcircuit(bit_Cell)
+    circuit.subcircuit(dmy_Cell)
     circuit.subcircuit(in_reg)
     circuit.subcircuit(se_cell)
 
     #sram_arr cell
     sram_arr    = sram_array_gen(num_bits, bit_Cell.name)
+    #dmy_arr cell
+    dmy_arr     = dmy_array_gen(num_words, dmy_Cell.name)
     #sram_arr cell
     se_arr      = se_array_gen(mem_bits, se_cell.name)
     #mat_arr cell
@@ -337,7 +355,7 @@ def gen_spice(mem_words, mem_bits, col_mux):
     #ctrl circuit
     pos_pulse_detector  = del_cell('del',delay_val, not_g.name, not_del_g.name, nand2_g.name)
     circuit.subcircuit(pos_pulse_detector)
-    ctrl                = blocks.self_timed_ctrl("ctrl",pos_pulse_detector.name, not_g.name,nand2_g.name)
+    ctrl                = blocks.self_timed_ctrl("ctrl",pos_pulse_detector.name, not_g.name,nand2_g.name,nand3_g.name)
     circuit.subcircuit(ctrl)
 
     #assemble all together
@@ -357,7 +375,7 @@ def gen_spice(mem_words, mem_bits, col_mux):
     for i in range(mem_bits):
         dout_ports += ' Q'+str(i)
         
-    mem_gen = SubCircuit(top_name, 'VDD', 'VSS', 'clk' + addr_ports + din_ports + dout_ports, 'write')
+    mem_gen = SubCircuit(top_name, 'VDD', 'VSS', 'clk' + addr_ports + din_ports + dout_ports, 'write', 'cs')
     #input block
     mem_gen.X(0, input_reg_arr.name, 'VDD','VSS', 'clk' + addr_ports + ' write' + a_ports, 'WREN')
     #add row decoder
@@ -404,11 +422,14 @@ def gen_spice(mem_words, mem_bits, col_mux):
     #ctrl
     mem_gen.X(8, ctrl.name, ctrl.external_nodes[0])
 
+    mem_gen.X(9, dmy_arr.name, dmy_arr.external_nodes[0])
+
     #linking
     circuit.subcircuit(input_reg_arr)
     circuit.subcircuit(datain_reg_arr)
     circuit.subcircuit(r_dec)
     circuit.subcircuit(sram_arr)
+    circuit.subcircuit(dmy_arr)
     circuit.subcircuit(se_arr)
     circuit.subcircuit(mat_arr)
     circuit.subcircuit(ctrl)
