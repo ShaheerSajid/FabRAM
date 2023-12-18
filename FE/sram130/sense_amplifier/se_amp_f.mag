@@ -1,7 +1,7 @@
 magic
 tech sky130A
 magscale 1 2
-timestamp 1702727116
+timestamp 1702870595
 << nwell >>
 rect 338 1619 644 1848
 rect 0 1116 720 1619
@@ -689,8 +689,6 @@ rlabel metal2 640 2614 692 2666 0 DR
 rlabel metal1 12 2580 46 2614 0 VDD
 rlabel metal1 12 2488 46 2522 0 SAEN
 rlabel metal1 12 2393 46 2427 0 VSS
-rlabel metal2 164 0 216 52 0 DW_
-rlabel metal2 488 0 540 52 0 DW
 rlabel metal1 463 0 497 34 0 SB
 rlabel metal1 0 1290 34 1324 0 VDD
 rlabel metal1 0 766 34 800 0 VSS

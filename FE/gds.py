@@ -140,17 +140,6 @@ def gen_gds(mem_words, mem_bits, col_mux):
 
     mux_arr = lib.new_cell(name="mux_arr"+str(col_mux))
     #generate horizontal wires
-    # layer = "M2_drw"
-    # via = "VIA2_drw"
-    # l_w = rules[layer][0]
-    # v_w = rules[via][0]
-    # v_encl = rules[via][1]
-    # l_s = rules[layer][1]
-    # ltol_dist = l_w/2 + v_encl/2 + l_s
-
-    # l_num = layers[layer][0]
-    # l_data = layers[layer][1]
-
     layer = "M3_drw"
     l_w = rules[layer][0]
     l_s = rules[layer][1]
@@ -167,8 +156,8 @@ def gen_gds(mem_words, mem_bits, col_mux):
 
     sel_lines = gdspy.Path(width= l_w, initial_point=(0, 0), number_of_paths=col_mux, distance=ltol_dist)
     sel_lines.segment(Xs_dido[p_last]-0, "+x", layer=l_num,datatype=l_data)
-    sel_lines_width = sel_lines.get_bounding_box()[1][1]
-    sel_lines.translate(0, -1.2*sel_lines_width)
+    sel_lines_width = (sel_lines.get_bounding_box()[1][1]-sel_lines.get_bounding_box()[0][1])/2
+    sel_lines.translate(0, -(sel_lines_width+ltol_dist))
     mux_arr.add(sel_lines)
 
     #generate vias
@@ -201,19 +190,21 @@ def gen_gds(mem_words, mem_bits, col_mux):
         mux_arr.add(gdspy.Rectangle((x-v_encl_top[0]-v_w/2, y-v_encl_top[1]-v_w/2), (x+v_encl_top[0]+v_w/2, y+v_encl_top[1]+v_w/2), layer=l_num+1, datatype=l_data))
         j = j+1
 
-    # #the rest stay within mux size
-    # #get sense amplifier pins
-    # layer = "M3_pin"
+    
+
+    #the rest stay within mux size
+    #get sense amplifier pins
+    # layer = "M2_pin"
     # l_num = layers[layer][0]
 
     # Y_samp = 0
     # Xs_samp = []
     # for l in se_arr_cell.get_labels():
-    #     if re.search("^clk$|^SAEN$|^DR$|^DR_$|^DW$|^DW_$",l.text) and l.layer == l_num:
+    #     if re.search("^DR$|^DW$|^DW_$|^DR_$",l.text) and l.layer == l_num:
     #         Y_samp = l.position[1]
     #         Xs_samp.append(l.position[0])
     # Xs_samp.sort()
-    # pin_order_samp = [0,1,2,3,4,5]
+    # pin_order_samp = [0,1,2,3]
     # Xs_samp_split = split_lists = [Xs_samp[x:x+len(pin_order_samp)] for x in range(0, len(Xs_samp), len(pin_order_samp))]
 
     # #clk and saen
