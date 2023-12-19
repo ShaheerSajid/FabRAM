@@ -112,7 +112,7 @@ def sense_amp_gen(name):
     circuit.X(13,nmos_device, 'SB_w','SAEN','SB_' ,'VSS',     w='0.60',l='0.15')
     circuit.X(14,nmos_device, 'Q_','SAEN','diff2_','VSS',     w='0.60',l='0.15')
 
-    circuit.X(15,pmos_device,'SB','SB_w','VDD' ,'VDD' , w='1', l='0.15')
+    circuit.X(15,pmos_device,'SB','SB_w','VDD' ,'VDD' , w='2', l='0.15')
     circuit.X(16,nmos_device,'SB','SB_w','VSS' ,'VSS' , w='1', l='0.15')
 
     return circuit
@@ -190,24 +190,20 @@ def row_driver_cell(name, nand2_name):
 
 # control
 def self_timed_ctrl(name, del_cell_name, not_name, nand2_name, nand3_name):
-    ctrl = SubCircuit(name, 'VDD VSS clk cs DBL DBL_ WREN PCHG WLEN SAEN')
+    ctrl = SubCircuit(name, 'VDD VSS clk cs write DBL DBL_ WREN PCHG WLEN SAEN')
     
-    ctrl.X(0, del_cell_name, 'VDD', 'VSS', 'clk', 'clkp')
-    #latch wlen RST
-    ctrl.X(1 ,pmos_device,'net2','RST','VDD','VDD',l='0.15',w='0.8' )
-    ctrl.X(2 ,nmos_device,'net2','clkp','VSS','VSS',l='0.15',w='0.8' )
-    #latch
-    #should be strong inverter
-    ctrl.X(3 ,pmos_device, 'WLENP','net2','VDD','VDD',     l='0.15',w='0.8' )
-    ctrl.X(4 ,nmos_device, 'WLENP','net2','VSS','VSS',     l='0.15',w='0.8' )
-    #should be weak inverter
-    ctrl.X(5 ,nmos_device,'net2','RST','net1','VSS',      l='0.15',w='0.8' )
-    ctrl.X(6 ,pmos_device,'net1','WLENP','VDD','VDD',      l='0.15',w='0.42' )
-    ctrl.X(7 ,nmos_device,'net1','WLENP','VSS','VSS',      l='0.15',w='0.42' )
+    ctrl.X(0 ,pmos_device, 'net2','clk','VDD','VDD',     l='0.15',w='0.8' )
+    ctrl.X(1 ,nmos_device, 'net2','clk','VSS','VSS',     l='0.15',w='0.8' )
+    ctrl.X(2 ,pmos_device, 'WLENP','net2','VDD','VDD',    l='0.15',w='0.8' )
+    ctrl.X(3 ,nmos_device, 'WLENP','net2','VSS','VSS',    l='0.15',w='0.8' )
 
-    # always on PCHG during reads
-    ctrl.X(8,  not_name,    'VDD', 'VSS', 'WREN', 'WREN_')
-    ctrl.X(9, nand2_name, 'VDD', 'VSS', 'VDD', 'WREN_', 'PCHG')
+    # always on PCHG during reads and neg edge
+    ctrl.X(4, not_name, 'VDD', 'VSS', 'write', 'WREN_')
+    ctrl.X(5, not_name, 'VDD', 'VSS', 'clk', 'clkp')
+    ctrl.X(6, nand2_name,'VDD', 'VSS', 'clkp', 'WREN_', 'PCHGP')
+    ctrl.X(7, not_name, 'VDD', 'VSS', 'PCHGP', 'PCHGPP')
+    ctrl.X(8 ,pmos_device, 'PCHG','PCHGPP','VDD','VDD',    l='0.15',w='4' )
+    ctrl.X(9 ,nmos_device, 'PCHG','PCHGPP','VSS','VSS',    l='0.15',w='2' )
 
     ctrl.X(10 ,pmos_device,'DBL_' ,'PCHG','VDD','VDD', l='0.15',w='0.42')
     ctrl.X(11 ,pmos_device,'DBL'  ,'PCHG','DBL_','VDD',l='0.15',w='0.42') 
@@ -217,14 +213,13 @@ def self_timed_ctrl(name, del_cell_name, not_name, nand2_name, nand3_name):
     ctrl.X(13, nand2_name,  'VDD', 'VSS', 'cs', 'WLENP', 'WLENPP')
     ctrl.X(14, not_name,    'VDD', 'VSS', 'WLENPP', 'WLEN')
 
-    # turn on sense amplifier if cs
+    # turn on sense amplifier
     ctrl.X(15, not_name,    'VDD', 'VSS', 'DBL_', 'RBL')
-    ctrl.X(16, nand3_name,  'VDD', 'VSS', 'cs' ,'WLEN', 'RBL', 'SAEN_')
-    ctrl.X(17, not_name,    'VDD', 'VSS', 'SAEN_', 'SAEN')
+    ctrl.X(16, nand2_name,  'VDD', 'VSS','WLEN', 'RBL', 'SAEN_')
 
-    #turn on rst
-    #reset on negedge
-    ctrl.X(19, not_name, 'VDD', 'VSS', 'clk', 'clk_')
-    ctrl.X(20, del_cell_name, 'VDD', 'VSS', 'clk_', 'RST_')
-    ctrl.X(21, not_name, 'VDD', 'VSS', 'RST_', 'RST')
+    ctrl.X(17 ,pmos_device, 'SAEN','SAEN_','VDD','VDD',    l='0.15',w='2' )
+    ctrl.X(18 ,nmos_device, 'SAEN','SAEN_','VSS','VSS',    l='0.15',w='1' )
+
+    ctrl.X(19 ,pmos_device, 'WREN','WREN_','VDD','VDD',    l='0.15',w='4' )
+    ctrl.X(20 ,nmos_device, 'WREN','WREN_','VSS','VSS',    l='0.15',w='2' )
     return ctrl

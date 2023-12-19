@@ -49,11 +49,11 @@ simulation_steps = 2000
 
 models_lib = "/usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice"
 models_corner = "tt"
-sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram32x4.spi"
+sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram32x32.spi"
 
-sram_cell = "sram32x4"
+sram_cell = "sram32x32"
 mem_words = 32
-mem_bits = 4
+mem_bits = 32
 
 addr_bits   = math.log2(mem_words)
 
@@ -171,7 +171,7 @@ def run_sim_output_characterizer(simulation_params):
       meas tran tdiff_tran_fall TRIG v(Q0)  VAL={h_thresh} FALL=1 TARG v(Q0) VAL={l_thresh} FALL=1 
 
       echo "$&tdiff_cell_rise,$&tdiff_tran_rise $&tdiff_cell_fall,$&tdiff_tran_fall" > {outfile}.text
-      hardcopy {outfile}.svg v(clk)+9.0 v(Q0)+7.2 v(x0.PCHG)+5.4 v(x0.WLEN)+3.6 v(x0.SAEN)+1.8 v(x0.WREN)
+      hardcopy {outfile}.svg v(clk)+9.0 v(Q0)+7.2 v(x0.PCHG)+5.4 v(x0.WLEN)+3.6 v(x0.SAEN)+1.8 v(x0.WREN) v(x0.x8.RBL)
       exit
       .endc
       """.format(step=str(time_step)+time_unit, 
@@ -827,7 +827,7 @@ def run_sim_outputpwr_characterizer(simulation_params):
   dout_ports = ''
   for i in range(mem_bits):
       dout_ports += ' Q'+str(i)
-  port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + ' addr din' + din_ports + dout_ports + ' write' + power["name"] + ' ' +sram_cell
+  port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + ' addr din' + din_ports + dout_ports + ' write ' + power["name"] + ' ' +sram_cell
 
   sim_circuit.X(0, port_str)
 
@@ -973,7 +973,7 @@ def run_sim_rwpwr_characterizer(simulation_params):
   dout_ports = ''
   for i in range(mem_bits):
       dout_ports += ' Q'+str(i)
-  port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + ' addr din' + din_ports + dout_ports + ' write' + power["name"] + ' ' +sram_cell
+  port_str = power["name"] + ' ' + ground["name"] + ' clk' + addr_ports + ' addr din' + din_ports + dout_ports + ' write ' + power["name"] + ' ' +sram_cell
 
   sim_circuit.X(0, port_str)
 
@@ -1004,7 +1004,7 @@ def run_sim_rwpwr_characterizer(simulation_params):
 # get sram size as input to script
 # print starting message
 print("###################################################")
-print("Running Characterization of sram32x4")
+print("Running Characterization of "+sram_cell)
 print("###################################################")
 ##########################################################
 # Ouput
@@ -1016,9 +1016,9 @@ out_tr = []
 out_slew = []
 out_tr_fall = []
 out_slew_fall = []
-run_sim_output_characterizer(simulation_params[0])
+# run_sim_output_characterizer(simulation_params[0])
 # print(run_sim_leakage_characterizer())
-exit()
+# exit()
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
     executor.map(run_sim_output_characterizer, simulation_params)
 
@@ -1056,33 +1056,33 @@ for row in fall_transition:
 print("#########################")
 print("Setup Characterization")
 
-setup_time = []
-hold_time = []
+# setup_time = []
+# hold_time = []
 
-simulation_params = []
-for i in range(table_size):
-  for j in range(table_size):
-     simulation_params.append(((i,j), net_tr[i], net_tr[j]))
+# simulation_params = []
+# for i in range(table_size):
+#   for j in range(table_size):
+#      simulation_params.append(((i,j), net_tr[i], net_tr[j]))
 
-for params in simulation_params:
-  run_sim_setup_characterizer(params)
-stp_time = [[0 for x in range(table_size)] for y in range(table_size)] 
-for item in setup_time:
-  stp_time[item[0][0]][item[0][1]] = item[1]
-print("Setup Time")
-for row in stp_time:
-  print(row)
+# for params in simulation_params:
+#   run_sim_setup_characterizer(params)
+# stp_time = [[0 for x in range(table_size)] for y in range(table_size)] 
+# for item in setup_time:
+#   stp_time[item[0][0]][item[0][1]] = item[1]
+# print("Setup Time")
+# for row in stp_time:
+#   print(row)
 
 print("#########################")
 print("Hold Characterization")
-for params in simulation_params:
-  run_sim_hold_characterizer(params)
-hld_time = [[0 for x in range(table_size)] for y in range(table_size)] 
-for item in hold_time:
-  hld_time[item[0][0]][item[0][1]] = item[1]
-print("Hold Time")
-for row in hld_time:
-  print(row)
+# for params in simulation_params:
+#   run_sim_hold_characterizer(params)
+# hld_time = [[0 for x in range(table_size)] for y in range(table_size)] 
+# for item in hold_time:
+#   hld_time[item[0][0]][item[0][1]] = item[1]
+# print("Hold Time")
+# for row in hld_time:
+#   print(row)
 ###########################################################
 # Find Leakage
 ###########################################################
@@ -1096,22 +1096,31 @@ print("#########################")
 print("CLK pin Power")
 
 simulation_params = []
+setting = []
 for i in range(table_size):
   simulation_params.append((i, net_tr[i]))
+  setting.append(True)
 
 clk_pin_energy  = []
-for params in simulation_params:
-  run_sim_inputpwr_characterizer(params, True)
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+    executor.map(run_sim_inputpwr_characterizer, simulation_params,setting)
+
 print(clk_pin_energy)
-###########################################################
+##############################
+#############################
 # Find Input pin power
 ###########################################################
 print("#########################")
 print("Input pin Power")
 
 clk_pin_energy  = []
-for params in simulation_params:
-  run_sim_inputpwr_characterizer(params, False)
+setting = []
+for i in range(table_size):
+  setting.append(False)
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+    executor.map(run_sim_inputpwr_characterizer, simulation_params,setting)
 print(clk_pin_energy)
 ###########################################################
 # Find Output pin power
@@ -1124,8 +1133,9 @@ for i in range(table_size):
   simulation_params.append((i, cap_load[i]))
 
 out_pin_energy  = []
-for params in simulation_params:
-  run_sim_outputpwr_characterizer(params)
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+    executor.map(run_sim_outputpwr_characterizer, simulation_params)
 print(out_pin_energy)
 
 ###########################################################
@@ -1135,7 +1145,8 @@ print("#########################")
 print("Write/Read Power")
 
 r_w_pwr = []
-for params in simulation_params:
-  run_sim_rwpwr_characterizer(params)
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+    executor.map(run_sim_rwpwr_characterizer, simulation_params)
 print(r_w_pwr)
 

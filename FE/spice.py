@@ -375,9 +375,9 @@ def gen_spice(mem_words, mem_bits, col_mux):
     for i in range(mem_bits):
         dout_ports += ' Q'+str(i)
         
-    mem_gen = SubCircuit(top_name, 'VDD', 'VSS', 'clk' + addr_ports + din_ports + dout_ports, 'write', 'cs')
+    mem_gen = SubCircuit(top_name, 'VDD', 'VSS', 'clk' + addr_ports + din_ports + dout_ports, 'w_en', 'cs')
     #input block
-    mem_gen.X(0, input_reg_arr.name, 'VDD','VSS', 'clk' + addr_ports + ' write' + a_ports, 'WREN')
+    mem_gen.X(0, input_reg_arr.name, 'VDD','VSS', 'clk' + addr_ports + ' w_en' + a_ports, 'write')
     #add row decoder
     a_ports = ''
     for i in range(math.ceil((row_bits))):
