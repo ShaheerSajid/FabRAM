@@ -1,0 +1,34 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1703005732
+<< poly >>
+rect 65 121 95 214
+rect 283 135 313 214
+<< locali >>
+rect 107 113 142 236
+rect 325 113 359 236
+<< metal1 >>
+rect -29 352 407 386
+rect 19 324 53 352
+rect 237 324 271 352
+rect 19 -3 53 25
+rect 237 -3 271 25
+rect -29 -37 444 -3
+use sky130_fd_pr__nfet_01v8_A6LSUL  m1
+timestamp 1703005732
+transform 1 0 80 0 1 67
+box -73 -68 73 68
+use sky130_fd_pr__pfet_01v8_4Y88KP  m2
+timestamp 1703005732
+transform 1 0 80 0 1 282
+box -109 -104 109 104
+use sky130_fd_pr__nfet_01v8_A6LSUL  m3
+timestamp 1703005732
+transform 1 0 298 0 1 67
+box -73 -68 73 68
+use sky130_fd_pr__pfet_01v8_4Y88KP  m4
+timestamp 1703005732
+transform 1 0 298 0 1 282
+box -109 -104 109 104
+<< end >>

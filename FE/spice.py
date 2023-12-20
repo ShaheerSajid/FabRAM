@@ -171,6 +171,16 @@ def nand_dec(name, num_words, not_name, dec2to4_name, dec3to6_name, is_col):
         subckt += ' DC'+str(i)
     r_dec = SubCircuit(name+str(num_words), 'VDD VSS' + subckt)
 
+    if is_col:
+      if num_words == 1:
+        r_dec.X(0,not_name,'VDD','VSS','VDD','DC0')
+        return r_dec
+      elif num_words == 2:
+        r_dec.X(0,not_name,'VDD','VSS','A','DC1')
+        r_dec.X(1,not_name,'VDD','VSS','DC1','DC0')
+        return r_dec
+        
+
     Xcnt = 0
     for i in range(int(addr_bits/2 - 1)):
         r_dec.X(str(i), 

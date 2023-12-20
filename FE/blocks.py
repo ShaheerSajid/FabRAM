@@ -192,10 +192,10 @@ def row_driver_cell(name, nand2_name):
 def self_timed_ctrl(name, del_cell_name, not_name, nand2_name, nand3_name):
     ctrl = SubCircuit(name, 'VDD VSS clk cs write DBL DBL_ WREN PCHG WLEN SAEN')
     
-    ctrl.X(0 ,pmos_device, 'net2','clk','VDD','VDD',     l='0.15',w='0.8' )
-    ctrl.X(1 ,nmos_device, 'net2','clk','VSS','VSS',     l='0.15',w='0.8' )
-    ctrl.X(2 ,pmos_device, 'WLENP','net2','VDD','VDD',    l='0.15',w='0.8' )
-    ctrl.X(3 ,nmos_device, 'WLENP','net2','VSS','VSS',    l='0.15',w='0.8' )
+    ctrl.X(0 ,pmos_device, 'net2','clk','VDD','VDD',     l='0.15',w='0.42' )
+    ctrl.X(1 ,nmos_device, 'net2','clk','VSS','VSS',     l='0.15',w='0.42' )
+    ctrl.X(2 ,pmos_device, 'WLENP','net2','VDD','VDD',    l='0.15',w='0.42' )
+    ctrl.X(3 ,nmos_device, 'WLENP','net2','VSS','VSS',    l='0.15',w='0.42' )
 
     # always on PCHG during reads and neg edge
     ctrl.X(4, not_name, 'VDD', 'VSS', 'write', 'WREN_')
