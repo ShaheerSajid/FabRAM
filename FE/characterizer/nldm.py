@@ -49,10 +49,10 @@ simulation_steps = 2000
 
 models_lib = "/usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice"
 models_corner = "tt"
-sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram32x32.spi"
+sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram1024x32.spi"
 
-sram_cell = "sram32x32"
-mem_words = 32
+sram_cell = "sram1024x32"
+mem_words = 1024
 mem_bits = 32
 
 addr_bits   = math.log2(mem_words)
@@ -210,7 +210,7 @@ def run_sim_output_characterizer(simulation_params):
       print ("unsupported")
       return
     elif (simulator == "ngspice"):
-      subprocess.call(["ngspice",file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+      subprocess.call(["ngspice",file_prefix+".spi"])
       #parse timing
       f = open(file_prefix+".text", "r")
       rise_fall = f.readline().split(" ")
@@ -1016,9 +1016,9 @@ out_tr = []
 out_slew = []
 out_tr_fall = []
 out_slew_fall = []
-# run_sim_output_characterizer(simulation_params[0])
+run_sim_output_characterizer(simulation_params[0])
 # print(run_sim_leakage_characterizer())
-# exit()
+exit()
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
     executor.map(run_sim_output_characterizer, simulation_params)
 

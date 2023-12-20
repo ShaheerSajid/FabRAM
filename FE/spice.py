@@ -118,10 +118,10 @@ def data_write_arr_gen(name, len, ms_reg_name):
         # circuit.M(str(4*i+1),'DW_'+str(i),'din_r'+str(i),'VSS' ,'VSS',model=blocks.nmos_device,l='150n',w='4u')
         # circuit.M(str(4*i+2),'DW'+str(i),   'DW_'+str(i),'VDD' ,'VDD',model=blocks.pmos_device,l='150n',w='4u')
         # circuit.M(str(4*i+3),'DW'+str(i),   'DW_'+str(i),'VSS' ,'VSS',model=blocks.nmos_device,l='150n',w='4u')
-        circuit.X(str(4*i  +len),blocks.pmos_device,'DW_'+str(i),'din_r'+str(i),'VDD' ,'VDD',l='0.15',w='4')
-        circuit.X(str(4*i+1+len),blocks.nmos_device,'DW_'+str(i),'din_r'+str(i),'VSS' ,'VSS',l='0.15',w='4')
-        circuit.X(str(4*i+2+len),blocks.pmos_device,'DW'+str(i),   'DW_'+str(i),'VDD' ,'VDD',l='0.15',w='4')
-        circuit.X(str(4*i+3+len),blocks.nmos_device,'DW'+str(i),   'DW_'+str(i),'VSS' ,'VSS',l='0.15',w='4')
+        circuit.X(str(4*i  +len),blocks.pmos_device,'DW_'+str(i),'din_r'+str(i),'VDD' ,'VDD',l='0.15',w='2')
+        circuit.X(str(4*i+1+len),blocks.nmos_device,'DW_'+str(i),'din_r'+str(i),'VSS' ,'VSS',l='0.15',w='2')
+        circuit.X(str(4*i+2+len),blocks.pmos_device,'DW'+str(i),   'DW_'+str(i),'VDD' ,'VDD',l='0.15',w='2')
+        circuit.X(str(4*i+3+len),blocks.nmos_device,'DW'+str(i),   'DW_'+str(i),'VSS' ,'VSS',l='0.15',w='2')
     return circuit
 
 # row driver array generation
@@ -173,11 +173,18 @@ def nand_dec(name, num_words, not_name, dec2to4_name, dec3to6_name, is_col):
 
     if is_col:
       if num_words == 1:
-        r_dec.X(0,not_name,'VDD','VSS','VDD','DC0')
+        # r_dec.X(0,not_name,'VDD','VSS','VDD','DC0')
+        r_dec.X(0,blocks.pmos_device,'DC0','VDD','VDD' ,'VDD',l='0.15',w='2')
+        r_dec.X(1,blocks.nmos_device,'DC0','VDD','VSS' ,'VSS',l='0.15',w='1')
         return r_dec
       elif num_words == 2:
-        r_dec.X(0,not_name,'VDD','VSS','A','DC1')
-        r_dec.X(1,not_name,'VDD','VSS','DC1','DC0')
+        # r_dec.X(0,not_name,'VDD','VSS','A0','DC1')
+        # r_dec.X(1,not_name,'VDD','VSS','DC1','DC0')
+
+        r_dec.X(0,blocks.pmos_device,'DC1','A0','VDD' ,'VDD',l='0.15',w='2')
+        r_dec.X(1,blocks.nmos_device,'DC1','A0','VSS' ,'VSS',l='0.15',w='1')
+        r_dec.X(2,blocks.pmos_device,'DC0','DC1','VDD' ,'VDD',l='0.15',w='2')
+        r_dec.X(3,blocks.nmos_device,'DC0','DC1','VSS' ,'VSS',l='0.15',w='1')
         return r_dec
         
 
