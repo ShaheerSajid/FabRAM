@@ -384,7 +384,7 @@ X258 VDD VSS DC_127 DC127 not
 
 .subckt row_driver VDD VSS WLEN A B
 X0 VDD VSS A WLEN net1 nand2
-X1 B net1 VDD VDD nf=1 sky130_fd_pr__pfet_01v8 l=0.15 w=8
+X1 B net1 VDD VDD sky130_fd_pr__pfet_01v8 l=0.15 w=8
 X2 B net1 VSS VSS sky130_fd_pr__nfet_01v8 l=0.15 w=4
 .ends row_driver
 
