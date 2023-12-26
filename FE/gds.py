@@ -231,18 +231,19 @@ def gen_gds(mem_words, mem_bits, col_mux):
     v2_encl_b   = rules["VIA2_drw"][1][0]
     #FIXME: here it should be via1_top to via2_bot
     ltol_dist = v1_w/2 + v1_encl_t + v2_w/2 + v2_encl_b + l_s
-
-    for i in range(mem_bits):
-        for k in range(len(pin_order)):
-            if k == sel_pin:
-                continue
-            # get first
-            x1 = Xs_dido_chunks[col_mux*i][k]-l_w/2
-            x2 = Xs_dido_chunks[col_mux*(i+1)-1][k]+l_w/2
-            y1 = sel_lines.get_bounding_box()[0][1]-(k+1)*ltol_dist
-            mux_lines = gdspy.Path(width= l_w, initial_point=(x1, y1), number_of_paths=1)
-            mux_lines.segment(x2-x1, "+x", layer=l_num,datatype=l_data)
-            mux_arr.add(mux_lines)
+    y1 = sel_lines.get_bounding_box()[0][1]-ltol_dist
+    if col_mux > 1:
+        for i in range(mem_bits):
+            for k in range(len(pin_order)):
+                if k == sel_pin:
+                    continue
+                # get first
+                x1 = Xs_dido_chunks[col_mux*i][k]-l_w/2
+                x2 = Xs_dido_chunks[col_mux*(i+1)-1][k]+l_w/2
+                y1 = sel_lines.get_bounding_box()[0][1]-(k+1)*ltol_dist
+                mux_lines = gdspy.Path(width= l_w, initial_point=(x1, y1), number_of_paths=1)
+                mux_lines.segment(x2-x1, "+x", layer=l_num,datatype=l_data)
+                mux_arr.add(mux_lines)
 
      #generate vias
     layer = "M2_drw"
@@ -272,9 +273,10 @@ def gen_gds(mem_words, mem_bits, col_mux):
                     mux_lines.segment(Y_dido-y1+l_w, "-y", layer=l_num,datatype=l_data)
                 else:
                     mux_lines.segment(Y_dido-y, "-y", layer=l_num,datatype=l_data)
-                mux_arr.add(gdspy.Rectangle((x1-v_w/2, y-v_w/2), (x1+v_w/2, y+v_w/2), layer=v_num, datatype=v_data))
-                mux_arr.add(gdspy.Rectangle((x1-v_encl_bot[0]-v_w/2, y-v_encl_bot[1]-v_w/2), (x1+v_encl_bot[0]+v_w/2, y+v_encl_bot[1]+v_w/2), layer=l_num, datatype=l_data))
-                mux_arr.add(gdspy.Rectangle((x1-v_encl_top[0]-v_w/2, y-v_encl_top[1]-v_w/2), (x1+v_encl_top[0]+v_w/2, y+v_encl_top[1]+v_w/2), layer=l_num+1, datatype=l_data))
+                if col_mux > 1:
+                    mux_arr.add(gdspy.Rectangle((x1-v_w/2, y-v_w/2), (x1+v_w/2, y+v_w/2), layer=v_num, datatype=v_data))
+                    mux_arr.add(gdspy.Rectangle((x1-v_encl_bot[0]-v_w/2, y-v_encl_bot[1]-v_w/2), (x1+v_encl_bot[0]+v_w/2, y+v_encl_bot[1]+v_w/2), layer=l_num, datatype=l_data))
+                    mux_arr.add(gdspy.Rectangle((x1-v_encl_top[0]-v_w/2, y-v_encl_top[1]-v_w/2), (x1+v_encl_top[0]+v_w/2, y+v_encl_top[1]+v_w/2), layer=l_num+1, datatype=l_data))
                 mux_arr.add(mux_lines)
     ########################################################
     # generate decoder
