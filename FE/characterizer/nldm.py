@@ -49,11 +49,11 @@ simulation_steps = 2000
 
 models_lib = "/usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice"
 models_corner = "tt"
-sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram1024x32.spi"
+sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram128x128.spi"
 
-sram_cell = "sram1024x32"
-mem_words = 1024
-mem_bits = 32
+sram_cell = "sram128x128"
+mem_words = 128
+mem_bits = 128
 
 addr_bits   = math.log2(mem_words)
 
@@ -165,18 +165,18 @@ def run_sim_output_characterizer(simulation_params):
       .control
       set hcopydevtype = svg
       run
-      meas tran tdiff_cell_rise TRIG v(clk) VAL={c_thresh} RISE=1 TARG v(Q0) VAL={c_thresh} RISE=1 
-      meas tran tdiff_tran_rise TRIG v(Q0)  VAL={l_thresh} RISE=1 TARG v(Q0) VAL={h_thresh} RISE=1 
-      meas tran tdiff_cell_fall TRIG v(clk) VAL={c_thresh} RISE=2 TARG v(Q0) VAL={c_thresh} FALL=1 
-      meas tran tdiff_tran_fall TRIG v(Q0)  VAL={h_thresh} FALL=1 TARG v(Q0) VAL={l_thresh} FALL=1 
+      meas tran tdiff_cell_rise TRIG v(clk) VAL={c_thresh} RISE=3   TARG v(Q0) VAL={c_thresh} RISE=LAST 
+      meas tran tdiff_tran_rise TRIG v(Q0)  VAL={l_thresh} RISE=LAST TARG v(Q0) VAL={h_thresh} RISE=LAST 
+      meas tran tdiff_cell_fall TRIG v(clk) VAL={c_thresh} RISE=4 TARG v(Q0) VAL={c_thresh} FALL=LAST 
+      meas tran tdiff_tran_fall TRIG v(Q0)  VAL={h_thresh} FALL=LAST TARG v(Q0) VAL={l_thresh} FALL=LAST 
 
       echo "$&tdiff_cell_rise,$&tdiff_tran_rise $&tdiff_cell_fall,$&tdiff_tran_fall" > {outfile}.text
-      hardcopy {outfile}.svg v(clk)+9.0 v(Q0)+7.2 v(x0.PCHG)+5.4 v(x0.WLEN)+3.6 v(x0.SAEN)+1.8 v(x0.WREN) v(x0.x8.RBL)
+      hardcopy {outfile}.svg v(clk)+10 v(x0.WLEN)+8 v(x0.DC0)+8 v(x0.WL0)+8 v(x0.DBL)+6 v(x0.DBL_)+6 v(x0.SAEN)+6 v(x0.BL0)+4 v(x0.BL_0)+4 v(x0.DR0)+2 v(x0.DR_0)+2 v(x0.DW0) v(x0.DW_0) v(x0.x6.x0.x0.q)-2 v(x0.x6.x0.x0.q_)-2 v(x0.x6.x127.x0.q)-4 v(x0.x6.x127.x0.q_)-4 v(Q0)-6 v(x0.WREN)-8
       exit
       .endc
       """.format(step=str(time_step)+time_unit, 
                 max=str(max_time)+time_unit,
-                savetime = str(2.0*period)+time_unit,
+                savetime = str(2.0*0)+time_unit,
                 outfile = file_prefix,
                 l_thresh = l_thresh*power["value"],
                 c_thresh = c_thresh*power["value"],
@@ -210,7 +210,7 @@ def run_sim_output_characterizer(simulation_params):
       print ("unsupported")
       return
     elif (simulator == "ngspice"):
-      subprocess.call(["ngspice",file_prefix+".spi"])
+      subprocess.call(["ngspice",file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
       #parse timing
       f = open(file_prefix+".text", "r")
       rise_fall = f.readline().split(" ")

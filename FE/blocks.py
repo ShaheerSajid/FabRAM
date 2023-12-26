@@ -57,7 +57,7 @@ def nand3(name, W,L, ratio):
 
 # 4 input nand
 def nand4(name, W,L, ratio):
-    circuit = SubCircuit('nand4'+name, 'VDD VSS A B C Y')
+    circuit = SubCircuit('nand4'+name, 'VDD VSS A B C D Y')
     circuit.X(0, pmos_device,'Y', 'A', 'VDD', 'VDD',  w=ratio*W, l=L)
     circuit.X(1, pmos_device,'Y', 'B', 'VDD', 'VDD',  w=ratio*W, l=L)
     circuit.X(2, pmos_device,'Y', 'C', 'VDD', 'VDD',  w=ratio*W, l=L)
@@ -161,18 +161,18 @@ def ms_reg_gen(name):
 # digital in digital out circuit with precharge, column select and read/write pass transsitors
 def dido_gen(name, not_name, nand2_name):
     circuit = SubCircuit(name, 'VDD VSS PCHG WREN SEL BL BL_ DW DW_ DR DR_')
-    circuit.X(0 ,pmos_device,'BL_' ,'net6','VDD','VDD',   l='0.15',w='1')
-    circuit.X(1 ,pmos_device,'BL'  ,'net6','BL_','VDD',   l='0.15',w='1') 
-    circuit.X(2 ,pmos_device,'BL'  ,'net6','VDD','VDD',   l='0.15',w='1') 
+    circuit.X(0 ,pmos_device,'BL_' ,'net6','VDD','VDD',   l='0.15',w='0.42')
+    circuit.X(1 ,pmos_device,'BL'  ,'net6','BL_','VDD',   l='0.15',w='0.42') 
+    circuit.X(2 ,pmos_device,'BL'  ,'net6','VDD','VDD',   l='0.15',w='0.42') 
     circuit.X(3 ,pmos_device,'net6','net5','VDD','VDD',   l='0.15',w='0.42' )
     circuit.X(4 ,nmos_device,'net6','net5','VSS','VSS',   l='0.15',w='0.42' )
     circuit.X(5 ,pmos_device,'net5','PCHG' ,'VDD','VDD',  l='0.15',w='0.42' )
     circuit.X(6 ,nmos_device,'net5','PCHG' ,'VSS','VSS',  l='0.15',w='0.42' )
-    circuit.X(7 ,pmos_device,'BL_' ,'net3','DR_','VDD',   l='0.15',w='0.5') 
-    circuit.X(8 ,pmos_device,'DR'  ,'net3','BL' ,'VDD',   l='0.15',w='0.5') 
+    circuit.X(7 ,pmos_device,'BL_' ,'net3','DR_','VDD',   l='0.15',w='0.42') 
+    circuit.X(8 ,pmos_device,'DR'  ,'net3','BL' ,'VDD',   l='0.15',w='0.42') 
     circuit.X(9 ,pmos_device,'net4','SEL' ,'VDD','VDD',   l='0.15',w='0.42' )
-    circuit.X(10,nmos_device,'BL'  ,'net2','DW' ,'VSS',   l='0.15',w='1' )
-    circuit.X(11,nmos_device,'DW_' ,'net2','BL_','VSS',   l='0.15',w='1' )
+    circuit.X(10,nmos_device,'BL'  ,'net2','DW' ,'VSS',   l='0.15',w='0.42' )
+    circuit.X(11,nmos_device,'DW_' ,'net2','BL_','VSS',   l='0.15',w='0.42' )
     circuit.X(12,nmos_device,'net4','SEL' ,'VSS','VSS',   l='0.15',w='0.42' )
     circuit.X(13,nmos_device,'net3','net4','VSS','VSS',   l='0.15',w='0.42' )
     circuit.X(14,pmos_device,'net3','net4','VDD','VDD',   l='0.15',w='0.42' )
@@ -184,10 +184,32 @@ def dido_gen(name, not_name, nand2_name):
 def row_driver_cell(name, nand2_name):
     circuit = SubCircuit(name, 'VDD VSS WLEN A B')
     circuit.X(0,nand2_name,'VDD','VSS','A','WLEN','net1')
-    circuit.X(1, pmos_device,'B', 'net1', 'VDD', 'VDD',  w='2', l='0.15')
-    circuit.X(2, nmos_device,'B', 'net1', 'VSS', 'VSS',  w='2', l='0.15')
+    circuit.X(1, pmos_device,'B', 'net1', 'VDD', 'VDD',  w='8', l='0.15')
+    circuit.X(2, nmos_device,'B', 'net1', 'VSS', 'VSS',  w='4', l='0.15')
     return circuit
 
+# row driver
+def write_driver_cell(name):
+    circuit = SubCircuit(name, 'VDD VSS WREN Din DW DW_')
+    circuit.X(0, pmos_device,'en_', 'WREN', 'VDD', 'VDD',  w='0.42', l='0.15')
+    circuit.X(1, nmos_device,'en_', 'WREN', 'VSS', 'VSS',  w='0.42', l='0.15')
+
+    circuit.X(4, pmos_device,'d_', 'Din', 'VDD', 'VDD',  w='0.42', l='0.15')
+    circuit.X(5, nmos_device,'d_', 'Din', 'VSS', 'VSS',  w='0.42', l='0.15')
+
+    circuit.X(6, pmos_device,'net1','Din', 'VDD', 'VDD',  w='2', l='0.15')
+    circuit.X(7, pmos_device,'DW_', 'en_', 'net1','VDD',  w='2', l='0.15')
+    circuit.X(8 ,nmos_device,'DW_', 'WREN','net2','VSS',  w='1', l='0.15')
+    circuit.X(9 ,nmos_device,'net2','Din', 'VSS', 'VSS',  w='1', l='0.15')
+
+
+    circuit.X(10,pmos_device,'net3','d_',  'VDD', 'VDD',  w='2', l='0.15')
+    circuit.X(11,pmos_device,'DW',  'en_', 'net3','VDD',  w='2', l='0.15')
+    circuit.X(12,nmos_device,'DW',  'WREN','net4','VSS',  w='1', l='0.15')
+    circuit.X(13,nmos_device,'net4','d_',  'VSS', 'VSS',  w='1', l='0.15')
+
+
+    return circuit
 # control
 def self_timed_ctrl(name, del_cell_name, not_name, nand2_name, nand3_name):
     ctrl = SubCircuit(name, 'VDD VSS clk cs write DBL DBL_ WREN PCHG WLEN SAEN')
@@ -199,10 +221,10 @@ def self_timed_ctrl(name, del_cell_name, not_name, nand2_name, nand3_name):
 
     # always on PCHG during reads and neg edge
     ctrl.X(4, not_name, 'VDD', 'VSS', 'write', 'WREN_')
-    ctrl.X(6, nand2_name,'VDD', 'VSS', 'clk_', 'WREN_', 'PCHGP')
-    ctrl.X(7, not_name, 'VDD', 'VSS', 'PCHGP', 'PCHGPP')
-    ctrl.X(8 ,pmos_device, 'PCHG','PCHGPP','VDD','VDD',    l='0.15',w='4' )
-    ctrl.X(9 ,nmos_device, 'PCHG','PCHGPP','VSS','VSS',    l='0.15',w='2' )
+    # ctrl.X(6, nand2_name,'VDD', 'VSS', 'clk_', 'WREN_', 'PCHGP')
+    # ctrl.X(7, not_name, 'VDD', 'VSS', 'PCHGP', 'PCHGPP')
+    ctrl.X(8 ,pmos_device, 'PCHG','clk_','VDD','VDD',    l='0.15',w='8' )
+    ctrl.X(9 ,nmos_device, 'PCHG','clk_','VSS','VSS',    l='0.15',w='4' )
 
     ctrl.X(10 ,pmos_device,'DBL_' ,'PCHG','VDD','VDD', l='0.15',w='0.42')
     ctrl.X(11 ,pmos_device,'DBL'  ,'PCHG','DBL_','VDD',l='0.15',w='0.42') 
@@ -210,15 +232,18 @@ def self_timed_ctrl(name, del_cell_name, not_name, nand2_name, nand3_name):
 
     # word-line on if chipselect
     ctrl.X(13, nand2_name,  'VDD', 'VSS', 'cs', 'WLENP', 'WLENPP')
-    ctrl.X(14, not_name,    'VDD', 'VSS', 'WLENPP', 'WLEN')
+    # ctrl.X(14, not_name,    'VDD', 'VSS', 'WLENPP', 'WLEN')
+
+    ctrl.X(21 ,pmos_device, 'WLEN','WLENPP','VDD','VDD',    l='0.15',w='8' )
+    ctrl.X(22 ,nmos_device, 'WLEN','WLENPP','VSS','VSS',    l='0.15',w='4' )
 
     # turn on sense amplifier
     ctrl.X(15, not_name,    'VDD', 'VSS', 'DBL_', 'RBL')
     ctrl.X(16, nand2_name,  'VDD', 'VSS','WLEN', 'RBL', 'SAEN_')
 
-    ctrl.X(17 ,pmos_device, 'SAEN','SAEN_','VDD','VDD',    l='0.15',w='2' )
-    ctrl.X(18 ,nmos_device, 'SAEN','SAEN_','VSS','VSS',    l='0.15',w='1' )
+    ctrl.X(17 ,pmos_device, 'SAEN','SAEN_','VDD','VDD',    l='0.15',w='8' )
+    ctrl.X(18 ,nmos_device, 'SAEN','SAEN_','VSS','VSS',    l='0.15',w='4' )
 
-    ctrl.X(19 ,pmos_device, 'WREN','WREN_','VDD','VDD',    l='0.15',w='4' )
-    ctrl.X(20 ,nmos_device, 'WREN','WREN_','VSS','VSS',    l='0.15',w='2' )
+    ctrl.X(19 ,pmos_device, 'WREN','WREN_','VDD','VDD',    l='0.15',w='8' )
+    ctrl.X(20 ,nmos_device, 'WREN','WREN_','VSS','VSS',    l='0.15',w='4' )
     return ctrl

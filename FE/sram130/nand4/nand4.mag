@@ -1,0 +1,118 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1703325932
+<< poly >>
+rect 94 375 124 386
+rect 44 365 124 375
+rect 182 371 212 386
+rect 44 331 60 365
+rect 94 331 124 365
+rect 44 321 124 331
+rect 94 172 124 321
+rect 170 355 225 371
+rect 170 321 180 355
+rect 214 321 225 355
+rect 170 305 225 321
+rect 182 172 212 305
+rect 270 235 300 386
+rect 258 219 312 235
+rect 258 185 268 219
+rect 302 185 312 219
+rect 258 169 312 185
+rect 358 172 388 386
+rect 358 3 388 36
+rect 346 -13 400 3
+rect 346 -47 356 -13
+rect 390 -47 400 -13
+rect 346 -63 400 -47
+<< polycont >>
+rect 60 331 94 365
+rect 180 321 214 355
+rect 268 185 302 219
+rect 356 -47 390 -13
+<< locali >>
+rect 44 331 60 365
+rect 94 331 110 365
+rect 180 355 214 371
+rect 180 291 214 321
+rect 252 185 268 219
+rect 302 185 318 219
+rect 356 -13 390 3
+rect 356 -56 390 -47
+<< viali >>
+rect 60 331 94 365
+rect 180 257 214 291
+rect 268 185 302 217
+rect 268 183 302 185
+rect 356 -90 390 -56
+<< metal1 >>
+rect 0 524 482 558
+rect 48 496 82 524
+rect 224 496 258 524
+rect 400 496 434 524
+rect 136 376 170 412
+rect 312 376 346 412
+rect 48 365 106 371
+rect 0 331 60 365
+rect 94 331 106 365
+rect 136 342 434 376
+rect 48 325 106 331
+rect 400 306 434 342
+rect 168 291 226 297
+rect 0 257 180 291
+rect 214 257 226 291
+rect 168 251 226 257
+rect 400 272 482 306
+rect 256 217 314 223
+rect 0 183 268 217
+rect 302 183 314 217
+rect 256 177 314 183
+rect 400 146 434 272
+rect 48 34 82 63
+rect 0 0 482 34
+rect 344 -56 402 -50
+rect 0 -90 356 -56
+rect 390 -90 402 -56
+rect 344 -96 402 -90
+use sky130_fd_pr__nfet_01v8_A6LSUL  m1
+timestamp 1703323195
+transform 1 0 109 0 1 104
+box -73 -68 73 68
+use sky130_fd_pr__nfet_01v8_A6LSUL  m2
+timestamp 1703323195
+transform 1 0 197 0 1 104
+box -73 -68 73 68
+use sky130_fd_pr__nfet_01v8_A6LSUL  m3
+timestamp 1703323195
+transform 1 0 285 0 1 104
+box -73 -68 73 68
+use sky130_fd_pr__nfet_01v8_A6LSUL  m4
+timestamp 1703323195
+transform 1 0 373 0 1 104
+box -73 -68 73 68
+use sky130_fd_pr__pfet_01v8_4Y88KP  m5
+timestamp 1703323195
+transform 1 0 109 0 1 454
+box -109 -104 109 104
+use sky130_fd_pr__pfet_01v8_4Y88KP  m6
+timestamp 1703323195
+transform -1 0 197 0 1 454
+box -109 -104 109 104
+use sky130_fd_pr__pfet_01v8_4Y88KP  m7
+timestamp 1703323195
+transform 1 0 285 0 1 454
+box -109 -104 109 104
+use sky130_fd_pr__pfet_01v8_4Y88KP  m8
+timestamp 1703323195
+transform -1 0 373 0 1 454
+box -109 -104 109 104
+<< labels >>
+rlabel metal1 0 524 34 558 0 VDD
+rlabel metal1 0 331 34 365 0 A
+rlabel metal1 0 257 34 291 0 B
+rlabel metal1 0 183 34 217 0 C
+rlabel metal1 0 0 34 34 0 VSS
+rlabel metal1 0 -90 34 -56 0 D
+rlabel metal1 448 272 482 306 0 Y
+<< end >>

@@ -104,24 +104,17 @@ def dido_array_gen(len, dido_name):
     return circuit
 
 # write driver array gneration
-def data_write_arr_gen(name, len, ms_reg_name):
-    subckt = 'VDD VSS clk'
+def data_write_arr_gen(name, len, ms_reg_name,write_driver_name):
+    subckt = 'VDD VSS clk WREN'
     for i in range(len):
         subckt += ' din'+str(i)
     for i in range(len):
         subckt += ' DW'+str(i)+' DW_'+str(i) 
     circuit = SubCircuit(name+str(len), subckt)
     for i in range(len):
-        circuit.X(str(i), ms_reg_name, 'VDD','VSS', 'clk', 'din'+str(i), 'din_r'+str(i))
+        circuit.X(str(i), ms_reg_name, 'VDD','VSS', 'clk','din'+str(i), 'din_r'+str(i))
     for i in range(len):
-        # circuit.M(str(4*i  ),'DW_'+str(i),'din_r'+str(i),'VDD' ,'VDD',model=blocks.pmos_device,l='150n',w='4u')
-        # circuit.M(str(4*i+1),'DW_'+str(i),'din_r'+str(i),'VSS' ,'VSS',model=blocks.nmos_device,l='150n',w='4u')
-        # circuit.M(str(4*i+2),'DW'+str(i),   'DW_'+str(i),'VDD' ,'VDD',model=blocks.pmos_device,l='150n',w='4u')
-        # circuit.M(str(4*i+3),'DW'+str(i),   'DW_'+str(i),'VSS' ,'VSS',model=blocks.nmos_device,l='150n',w='4u')
-        circuit.X(str(4*i  +len),blocks.pmos_device,'DW_'+str(i),'din_r'+str(i),'VDD' ,'VDD',l='0.15',w='2')
-        circuit.X(str(4*i+1+len),blocks.nmos_device,'DW_'+str(i),'din_r'+str(i),'VSS' ,'VSS',l='0.15',w='2')
-        circuit.X(str(4*i+2+len),blocks.pmos_device,'DW'+str(i),   'DW_'+str(i),'VDD' ,'VDD',l='0.15',w='2')
-        circuit.X(str(4*i+3+len),blocks.nmos_device,'DW'+str(i),   'DW_'+str(i),'VSS' ,'VSS',l='0.15',w='2')
+        circuit.X(str(4*i+len),write_driver_name,'VDD','VSS', 'WREN','din_r'+str(i),'DW'+str(i), 'DW_'+str(i))
     return circuit
 
 # row driver array generation
@@ -368,7 +361,9 @@ def gen_spice(mem_words, mem_bits, col_mux):
     delay_val = 10
     input_reg_arr   = input_block_gen('input_reg', math.ceil((addr_bits)) + 1,in_reg.name)
     # din reg
-    datain_reg_arr  = data_write_arr_gen('datain_reg', mem_bits, in_reg.name)
+    write_driver_cell = blocks.write_driver_cell('write_driver')
+    circuit.subcircuit(write_driver_cell)
+    datain_reg_arr  = data_write_arr_gen('datain_reg', mem_bits, in_reg.name,write_driver_cell.name)
     #ctrl circuit
     pos_pulse_detector  = del_cell('del',delay_val, not_g.name, not_del_g.name, nand2_g.name)
     circuit.subcircuit(pos_pulse_detector)
