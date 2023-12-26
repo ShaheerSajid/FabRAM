@@ -107,6 +107,32 @@ def gen_gds(mem_words, mem_bits, col_mux):
                             [0,0])
     se_arr_cell.add(searray)
 
+        # clk,pwr and saen all tha way
+    layer = "M1_pin"
+    l_num = layers[layer][0]
+
+    Ys_samp = []
+    Xs_samp = []
+    for l in se_arr_cell.get_labels():
+        if re.search("^VDD$|^VSS$|^SAEN$",l.text) and l.layer == l_num:
+            Xs_samp.append(l.position[0])
+            Ys_samp.append(l.position[1])
+    Xs_samp.sort()
+    Ys_samp.sort()
+
+    layer = "M1_drw"
+    l_w = rules[layer][0]
+    l_num = layers[layer][0]
+    l_data = layers[layer][1]
+
+    # foreach y go from first to last x
+    x1 = Xs_samp[0]
+    x2 = Xs_samp[-1]
+    for i in range(len(Ys_samp)):
+        samp_lines = gdspy.Path(width= l_w, initial_point=(x1, Ys_samp[i]), number_of_paths=1)
+        samp_lines.segment(x2-x1, "+x", layer=l_num,datatype=l_data)
+        se_arr_cell.add(samp_lines)
+
 
     #generate sense amplifier array
     wdriver_arr_cell = lib.new_cell(name="write_driver"+str(mem_bits))
@@ -219,18 +245,6 @@ def gen_gds(mem_words, mem_bits, col_mux):
             mux_arr.add(mux_lines)
 
      #generate vias
-            
-    # layer = "M2_pin"
-    # l_num = layers[layer][0]
-
-    # Y_samp = 0
-    # Xs_samp = []
-    # for l in se_arr_cell.get_labels():
-    #     if re.search("^DR$|^DR_$|^DW$|^DW_$",l.text) and l.layer == l_num:
-    #         Y_samp = l.position[1]
-    #         Xs_samp.append(l.position[0])
-    # Xs_samp.sort()
-
     layer = "M2_drw"
     via = "VIA2_drw"
     l_w = rules[layer][0]
@@ -262,138 +276,6 @@ def gen_gds(mem_words, mem_bits, col_mux):
                 mux_arr.add(gdspy.Rectangle((x1-v_encl_bot[0]-v_w/2, y-v_encl_bot[1]-v_w/2), (x1+v_encl_bot[0]+v_w/2, y+v_encl_bot[1]+v_w/2), layer=l_num, datatype=l_data))
                 mux_arr.add(gdspy.Rectangle((x1-v_encl_top[0]-v_w/2, y-v_encl_top[1]-v_w/2), (x1+v_encl_top[0]+v_w/2, y+v_encl_top[1]+v_w/2), layer=l_num+1, datatype=l_data))
                 mux_arr.add(mux_lines)
-
-
-    #the rest stay within mux size
-    #get sense amplifier pins
-    # layer = "M2_pin"
-    # l_num = layers[layer][0]
-
-    # Y_samp = 0
-    # Xs_samp = []
-    # for l in se_arr_cell.get_labels():
-    #     if re.search("^DR$|^DW$|^DW_$|^DR_$",l.text) and l.layer == l_num:
-    #         Y_samp = l.position[1]
-    #         Xs_samp.append(l.position[0])
-    # Xs_samp.sort()
-    # pin_order_samp = [0,1,2,3]
-    # Xs_samp_split = split_lists = [Xs_samp[x:x+len(pin_order_samp)] for x in range(0, len(Xs_samp), len(pin_order_samp))]
-
-    # #clk and saen
-    # layer = "M2_drw"
-    # via = "VIA2_drw"
-    # l_w = rules[layer][0]
-    # v_w = rules[via][0]
-    # v_encl = rules[via][1]
-    # l_s = rules[layer][1]
-    # ltol_dist = l_w/2 + v_encl/2 + l_s
-
-    # l_num = layers[layer][0]
-    # l_data = layers[layer][1]
-
-    # Xs_samp_split
-    # samp_lines = gdspy.Path(width= v_encl, initial_point=(0, 0), number_of_paths=2, distance=ltol_dist)
-    # samp_lines.segment(Xs_samp_split[-1][1]-0, "+x", layer=l_num,datatype=l_data)
-    # samp_lines_width = samp_lines.get_bounding_box()[1][1]
-    # samp_lines.translate(0, sel_lines.get_bounding_box()[0][1]-samp_lines_width-l_s)
-    # mux_arr.add(samp_lines)
-
-
-    # i = 0
-    # mux_lines_Ys = []
-    # for m in Xs_dido_split:
-    #     for p in pin_order[1:]:
-    #         p_last = p - len(pin_order)
-    #         #generate horizontal wires
-    #         x = Xs_samp_split[i][p+1]-l_w/2
-    #         mux_lines = gdspy.Path(width= v_encl, initial_point=(x, sel_lines.get_bounding_box()[0][1]-samp_lines_width-l_s-(p+1)*ltol_dist), number_of_paths=1)
-    #         mux_lines.segment(m[p_last]+v_encl/2+l_w-x, "+x", layer=l_num,datatype=l_data)
-    #         mux_arr.add(mux_lines)
-    #         for q in mux_lines.polygons:
-    #             mux_lines_Ys.append(q[0][1]-v_encl/2)
-    #     i = i+1
-
-    # layer = "M3_drw"
-    # via = "VIA2_drw"
-    # l_w = rules[layer][0]
-    # v_w = rules[via][0]
-    # v_encl = rules[via][1]
-    # l_s = rules[layer][1]
-
-    # l_num = layers[layer][0]
-    # l_data = layers[layer][1]
-
-    # v_num = layers[via][0]
-    # v_data = layers[via][1]
-
-    # for i in range(len(Xs_samp_split)):
-    #     p = 0
-    #     for q in samp_lines.polygons:
-    #                 y =  q[0][1]-v_encl/2
-    #                 x = Xs_samp_split[i][p]
-    #                 samp_lines_vert = gdspy.Path(width= l_w, initial_point=(x,y), number_of_paths=1)
-    #                 samp_lines_vert.segment(abs(mux_arr.get_bounding_box()[0][1])-abs(y), "-y", layer=l_num,datatype=l_data)
-    #                 mux_arr.add(samp_lines_vert)
-    #                 y = y
-    #                 mux_arr.add(gdspy.Rectangle((x-v_w/2, y-v_w/2), (x+v_w/2, y+v_w/2), layer=v_num, datatype=v_data))
-    #                 mux_arr.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num-1, datatype=l_data))
-    #                 mux_arr.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num, datatype=l_data))
-    #                 p = p+1
-
-    # #the rest
-    # layer = "M2_drw"
-    # via = "VIA2_drw"
-    # l_w = rules[layer][0]
-    # v_w = rules[via][0]
-    # v_encl = rules[via][1]
-    # l_s = rules[layer][1]
-    # ltol_dist = l_w/2 + v_encl/2 + l_s
-
-    # l_num = layers[layer][0]
-    # l_data = layers[layer][1]
-
-    # i = 0
-    # for m in Xs_dido_split:
-    #     for p in pin_order[1:]:
-    #         p_last = p - len(pin_order)
-    #         #generate horizontal wires
-    #         x = Xs_samp_split[i][p+1]-l_w/2
-    #         mux_lines = gdspy.Path(width= v_encl, initial_point=(x, sel_lines.get_bounding_box()[0][1]-samp_lines_width-l_s-(p+1)*ltol_dist), number_of_paths=1)
-    #         mux_lines.segment(m[p_last]+v_encl/2+l_w-x, "+x", layer=l_num,datatype=l_data)
-    #         for q in mux_lines.polygons:
-    #             amp_lines_vert = gdspy.Path(width= l_w, initial_point=(x+l_w/2, q[0][1]-l_w), number_of_paths=1)
-    #             amp_lines_vert.segment(abs(mux_arr.get_bounding_box()[0][1])-abs(q[0][1]-l_w), "-y", layer=l_num+1,datatype=l_data)
-    #             mux_arr.add(amp_lines_vert)
-    #     i = i+1
-
-    # #connect dido pins to lines M2-M3 vias
-    # layer = "M3_drw"
-    # via = "VIA2_drw"
-    # l_w = rules[layer][0]
-    # v_w = rules[via][0]
-    # v_encl = rules[via][1]
-    # l_s = rules[layer][1]
-
-    # l_num = layers[layer][0]
-    # l_data = layers[layer][1]
-
-    # v_num = layers[via][0]
-    # v_data = layers[via][1]
-
-    # j = 0
-    # for i in range(len(Xs_dido)):
-    #     if i % 5:    
-    #         x = Xs_dido[i]
-    #         y = mux_lines_Ys[int(j%4)]
-    #         mux_lines_vert = gdspy.Path(width= l_w, initial_point=(x, Y_dido), number_of_paths=1)
-    #         mux_lines_vert.segment(Y_dido-y, "-y", layer=l_num,datatype=l_data)
-    #         mux_arr.add(mux_lines_vert)
-    #         mux_arr.add(gdspy.Rectangle((x-v_w/2, y-v_w/2), (x+v_w/2, y+v_w/2), layer=v_num, datatype=v_data))
-    #         mux_arr.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num-1, datatype=l_data))
-    #         mux_arr.add(gdspy.Rectangle((x-v_encl/2, y-v_encl/2), (x+v_encl/2, y+v_encl/2), layer=l_num, datatype=l_data))
-    #         j = j+1
-    # #generate clk and saen
-
     ########################################################
     # generate decoder
     ########################################################
