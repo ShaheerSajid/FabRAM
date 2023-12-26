@@ -210,7 +210,7 @@ def run_sim_output_characterizer(simulation_params):
       print ("unsupported")
       return
     elif (simulator == "ngspice"):
-      subprocess.call(["ngspice",file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+      subprocess.call(["ngspice",file_prefix+".spi"])
       #parse timing
       f = open(file_prefix+".text", "r")
       rise_fall = f.readline().split(" ")

@@ -2,7 +2,7 @@
 .include /home/shaheer/Desktop/FabRAM/FE/out/sram128x128.spi
 .lib /usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
 
-      .tran 0.01165125n 23.302500000000002n 0.0n
+      .tran 0.011671250000000001n 23.3425n 0.0n
       .control
       set hcopydevtype = svg
       run
@@ -11,16 +11,16 @@
       meas tran tdiff_cell_fall TRIG v(clk) VAL=0.9 RISE=4 TARG v(Q0) VAL=0.9 FALL=LAST 
       meas tran tdiff_tran_fall TRIG v(Q0)  VAL=1.62 FALL=LAST TARG v(Q0) VAL=0.18000000000000002 FALL=LAST 
 
-      echo "$&tdiff_cell_rise,$&tdiff_tran_rise $&tdiff_cell_fall,$&tdiff_tran_fall" > log/sim_0.33025_0.02784.text
-      hardcopy log/sim_0.33025_0.02784.svg v(clk)+10 v(x0.WLEN)+8 v(x0.DC0)+8 v(x0.WL0)+8 v(x0.DBL)+6 v(x0.DBL_)+6 v(x0.SAEN)+6 v(x0.BL0)+4 v(x0.BL_0)+4 v(x0.DR0)+2 v(x0.DR_0)+2 v(x0.DW0) v(x0.DW_0) v(x0.x6.x0.x0.q)-2 v(x0.x6.x0.x0.q_)-2 v(x0.x6.x127.x0.q)-4 v(x0.x6.x127.x0.q_)-4 v(Q0)-6 v(x0.WREN)-8
+      echo "$&tdiff_cell_rise,$&tdiff_tran_rise $&tdiff_cell_fall,$&tdiff_tran_fall" > log/sim_0.33425_0.03114.text
+      hardcopy log/sim_0.33425_0.03114.svg v(clk)+10 v(x0.WLEN)+8 v(x0.DC0)+8 v(x0.WL0)+8 v(x0.DBL)+6 v(x0.DBL_)+6 v(x0.SAEN)+6 v(x0.BL0)+4 v(x0.BL_0)+4 v(x0.DR0)+2 v(x0.DR_0)+2 v(x0.DW0) v(x0.DW_0) v(x0.x6.x0.x0.q)-2 v(x0.x6.x0.x0.q_)-2 v(x0.x6.x127.x0.q)-4 v(x0.x6.x127.x0.q_)-4 v(Q0)-6 v(x0.WREN)-8
       exit
       .endc
       
 Vpower VDD 0 1.8
 Vgnd VSS 0 0
-Vclk clk VSS DC 0V PULSE(0V 1.8V 0ns 0.41281249999999997ns 0.41281249999999997ns 2.5ns 5.8256250000000005ns)
-Vaddr addr VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 2.5ns 11.651250000000001ns)
-Vdin din VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 2.5ns 11.651250000000001ns)
-Vwrite write VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 11.651250000000001ns 23.302500000000002ns)
+Vclk clk VSS DC 0V PULSE(0V 1.8V 0ns 0.4178125ns 0.4178125ns 2.5ns 5.835625ns)
+Vaddr addr VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 2.5ns 11.67125ns)
+Vdin din VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 2.5ns 11.67125ns)
+Vwrite write VSS DC 0V PULSE(0V 1.8V 0s 1ps 1ps 11.67125ns 23.3425ns)
 X0 VDD VSS clk addr addr addr addr addr addr addr din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din din Q0 Q1 Q2 Q3 Q4 Q5 Q6 Q7 Q8 Q9 Q10 Q11 Q12 Q13 Q14 Q15 Q16 Q17 Q18 Q19 Q20 Q21 Q22 Q23 Q24 Q25 Q26 Q27 Q28 Q29 Q30 Q31 Q32 Q33 Q34 Q35 Q36 Q37 Q38 Q39 Q40 Q41 Q42 Q43 Q44 Q45 Q46 Q47 Q48 Q49 Q50 Q51 Q52 Q53 Q54 Q55 Q56 Q57 Q58 Q59 Q60 Q61 Q62 Q63 Q64 Q65 Q66 Q67 Q68 Q69 Q70 Q71 Q72 Q73 Q74 Q75 Q76 Q77 Q78 Q79 Q80 Q81 Q82 Q83 Q84 Q85 Q86 Q87 Q88 Q89 Q90 Q91 Q92 Q93 Q94 Q95 Q96 Q97 Q98 Q99 Q100 Q101 Q102 Q103 Q104 Q105 Q106 Q107 Q108 Q109 Q110 Q111 Q112 Q113 Q114 Q115 Q116 Q117 Q118 Q119 Q120 Q121 Q122 Q123 Q124 Q125 Q126 Q127 write VDD sram128x128
-C0 Q0 VSS 0.02784p
+C0 Q0 VSS 0.03114p

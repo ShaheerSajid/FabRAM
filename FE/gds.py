@@ -191,6 +191,78 @@ def gen_gds(mem_words, mem_bits, col_mux):
         j = j+1
 
     
+    #generate horizontal wires
+    layer = "M3_drw"
+    l_w = rules[layer][0]
+    l_s = rules[layer][1]
+    l_num = layers[layer][0]
+    l_data = layers[layer][1]
+
+    v1_w        = rules["VIA2_drw"][0]
+    v1_encl_t   = rules["VIA2_drw"][2][0]
+
+    v2_w        = rules["VIA2_drw"][0]
+    v2_encl_b   = rules["VIA2_drw"][1][0]
+    #FIXME: here it should be via1_top to via2_bot
+    ltol_dist = v1_w/2 + v1_encl_t + v2_w/2 + v2_encl_b + l_s
+
+    for i in range(mem_bits):
+        for k in range(len(pin_order)):
+            if k == sel_pin:
+                continue
+            # get first
+            x1 = Xs_dido_chunks[col_mux*i][k]-l_w/2
+            x2 = Xs_dido_chunks[col_mux*(i+1)-1][k]+l_w/2
+            y1 = sel_lines.get_bounding_box()[0][1]-(k+1)*ltol_dist
+            mux_lines = gdspy.Path(width= l_w, initial_point=(x1, y1), number_of_paths=1)
+            mux_lines.segment(x2-x1, "+x", layer=l_num,datatype=l_data)
+            mux_arr.add(mux_lines)
+
+     #generate vias
+            
+    # layer = "M2_pin"
+    # l_num = layers[layer][0]
+
+    # Y_samp = 0
+    # Xs_samp = []
+    # for l in se_arr_cell.get_labels():
+    #     if re.search("^DR$|^DR_$|^DW$|^DW_$",l.text) and l.layer == l_num:
+    #         Y_samp = l.position[1]
+    #         Xs_samp.append(l.position[0])
+    # Xs_samp.sort()
+
+    layer = "M2_drw"
+    via = "VIA2_drw"
+    l_w = rules[layer][0]
+    v_w = rules[via][0]
+    v_encl_bot = rules[via][1]
+    v_encl_top = rules[via][2]
+    l_s = rules[layer][1]
+
+    l_num = layers[layer][0]
+    l_data = layers[layer][1]
+
+    v_num = layers[via][0]
+    v_data = layers[via][1]
+
+    for i in range(mem_bits):
+        for k in range(len(pin_order)):
+            if k == sel_pin:
+                continue
+            # get first
+            y = sel_lines.get_bounding_box()[0][1]-(k+1)*ltol_dist
+            for c in range(col_mux):
+                x1 = Xs_dido_chunks[col_mux*i+c][k]
+                mux_lines = gdspy.Path(width= l_w, initial_point=(x1, Y_dido), number_of_paths=1)
+                if c == 0:
+                    mux_lines.segment(Y_dido-y1+l_w, "-y", layer=l_num,datatype=l_data)
+                else:
+                    mux_lines.segment(Y_dido-y, "-y", layer=l_num,datatype=l_data)
+                mux_arr.add(gdspy.Rectangle((x1-v_w/2, y-v_w/2), (x1+v_w/2, y+v_w/2), layer=v_num, datatype=v_data))
+                mux_arr.add(gdspy.Rectangle((x1-v_encl_bot[0]-v_w/2, y-v_encl_bot[1]-v_w/2), (x1+v_encl_bot[0]+v_w/2, y+v_encl_bot[1]+v_w/2), layer=l_num, datatype=l_data))
+                mux_arr.add(gdspy.Rectangle((x1-v_encl_top[0]-v_w/2, y-v_encl_top[1]-v_w/2), (x1+v_encl_top[0]+v_w/2, y+v_encl_top[1]+v_w/2), layer=l_num+1, datatype=l_data))
+                mux_arr.add(mux_lines)
+
 
     #the rest stay within mux size
     #get sense amplifier pins
@@ -540,7 +612,7 @@ def gen_gds(mem_words, mem_bits, col_mux):
     X = 0
     #get all As of labels
     for l in ctrl_cell.get_labels():
-        if re.search("^cs$|^WREN$",l.text) and l.layer == l_num:
+        if re.search("^cs$|^write$",l.text) and l.layer == l_num:
             X = l.position[0]
             Ys.append(l.position[1])
     gate = cellnames['in_reg']
