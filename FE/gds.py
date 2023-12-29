@@ -669,6 +669,36 @@ def gen_gds(mem_words, mem_bits, col_mux):
             col_dec_cell.add(gdspy.Rectangle((x-v_encl_top[0]-v_w/2, y-v_encl_top[1]-v_w/2), (x+v_encl_top[0]+v_w/2, y+v_encl_top[1]+v_w/2), layer=l_num+1, datatype=l_data))
             col_dec_cell.add(in_dec_lines)
 
+    #######################
+    # input reg col
+    #######################
+
+    layer = "M1_pin"
+    l_num = layers[layer][0]
+    l_w = rules["M1_drw"][0]
+    Ys = []
+    X = 0
+    #get all As of labels
+    for l in col_dec_cell.get_labels():
+        if re.search("^A[\d]+$",l.text) and l.layer == l_num:
+            X = l.position[0]
+            Ys.append(l.position[1])
+    #sort them from biggest to smallest
+    Ys = list(set(Ys))
+    Ys.sort(reverse=True)
+
+    col_addr_reg_cell = lib.new_cell(name="col_addr_reg")
+    gate = cellnames['in_reg']
+
+    # get d position
+    for l in lib.cells[gate].get_labels():
+        if re.search("^q$",l.text) and l.layer == l_num:
+            Y_q = l.position[1]
+
+    for i in range(int(row_bits)):
+        reg_cell = gdspy.CellReference(lib.cells[gate],  [X-cell_get_dim(lib.cells[gate])[1][0]-l_w/2,Ys[i]-Y_q])
+        col_addr_reg_cell.add(reg_cell)
+
     ########################################################################
     # control
     ctrl_cell = lib.new_cell(name="ctrl_cell")
@@ -719,6 +749,12 @@ def gen_gds(mem_words, mem_bits, col_mux):
                                                    -dido_arr_cell.get_bounding_box()[1][1]]))#WL label position
     # col driver
     cell.add(gdspy.CellReference(col_driver_arr_cell,  [-(col_driver_arr_cell.get_bounding_box()[1][0]
+                                                        +lib.cells["col_dec"+str(col_mux)+"_f"].get_bounding_box()[1][0]),
+                                                        -col_dec_cell.get_bounding_box()[1][1]
+                                                        -dido_arr_cell.get_bounding_box()[1][1]]))
+    
+    cell.add(gdspy.CellReference(col_addr_reg_cell, [-(col_dec_cell.get_bounding_box()[1][0]
+                                                        +col_driver_arr_cell.get_bounding_box()[1][0]
                                                         +lib.cells["col_dec"+str(col_mux)+"_f"].get_bounding_box()[1][0]),
                                                         -col_dec_cell.get_bounding_box()[1][1]
                                                         -dido_arr_cell.get_bounding_box()[1][1]]))
