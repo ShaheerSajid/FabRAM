@@ -1,25 +1,38 @@
 magic
 tech sky130A
 magscale 1 2
-timestamp 1703656013
+timestamp 1703823850
 << metal1 >>
+rect -473 1024 -11 1058
 rect 985 806 995 828
+rect -473 772 -374 806
+rect -384 754 -374 772
+rect -322 772 -11 806
 rect 831 772 995 806
 rect 1051 772 1061 828
+rect -322 754 -312 772
+rect -473 500 -11 534
+rect -384 76 -374 128
+rect -322 76 -312 128
 rect 1079 110 1089 132
 rect 831 76 1089 110
 rect 1145 76 1155 132
 rect 2179 35 2213 1165
 rect 2179 0 2301 35
 << via1 >>
+rect -374 754 -322 806
 rect 995 772 1051 828
+rect -374 76 -322 128
 rect 1089 76 1145 132
 << metal2 >>
 rect 0 1057 53 1165
 rect 995 1035 1051 1045
 rect 995 828 1051 979
+rect -374 806 -322 816
 rect 995 762 1051 772
 rect 1089 909 1145 919
+rect -374 128 -322 754
+rect -374 66 -322 76
 rect 1089 132 1145 853
 rect 1089 42 1145 76
 << via2 >>
@@ -34,6 +47,18 @@ rect 1079 909 2289 914
 rect 1079 853 1089 909
 rect 1145 853 2289 909
 rect 1079 848 2289 853
+use not_f  not_f_0 ~/Desktop/FabRAM/FE/sram130/not
+timestamp 1703586424
+transform 1 0 -374 0 1 -334
+box 0 138 330 696
+use row_driver_f  row_driver_f_0 ~/Desktop/FabRAM/FE/sram130/row_driver
+timestamp 1703586424
+transform 1 0 -45 0 1 362
+box 0 0 876 696
+use row_driver_f  row_driver_f_1
+timestamp 1703586424
+transform 1 0 -45 0 1 -334
+box 0 0 876 696
 << labels >>
 rlabel metal1 831 772 865 806 0 SEL0
 rlabel metal1 831 76 865 110 0 SEL1

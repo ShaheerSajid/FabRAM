@@ -49,11 +49,11 @@ simulation_steps = 2000
 
 models_lib = "/usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice"
 models_corner = "tt"
-sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram128x256.spi"
+sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram256x32.spi"
 
-sram_cell = "sram128x256"
-mem_words = 128
-mem_bits = 256
+sram_cell = "sram256x32"
+mem_words = 256
+mem_bits = 32
 
 addr_bits   = math.log2(mem_words)
 
@@ -171,7 +171,7 @@ def run_sim_output_characterizer(simulation_params):
       meas tran tdiff_tran_fall TRIG v(Q0)  VAL={h_thresh} FALL=LAST TARG v(Q0) VAL={l_thresh} FALL=LAST 
 
       echo "$&tdiff_cell_rise,$&tdiff_tran_rise $&tdiff_cell_fall,$&tdiff_tran_fall" > {outfile}.text
-      hardcopy {outfile}.svg v(clk)+10 v(x0.WLEN)+8 v(x0.DC0)+8 v(x0.WL0)+8 v(x0.DBL)+6 v(x0.DBL_)+6 v(x0.SAEN)+6 v(x0.BL0)+4 v(x0.BL_0)+4 v(x0.DR0)+2 v(x0.DR_0)+2 v(x0.DW0) v(x0.DW_0) v(x0.x6.x0.x0.q)-2 v(x0.x6.x0.x0.q_)-2 v(x0.x6.x127.x0.q)-4 v(x0.x6.x127.x0.q_)-4 v(Q0)-6 v(x0.WREN)-8
+      hardcopy {outfile}.svg v(clk)+10 v(x0.WLEN)+8 v(x0.DC0)+8 v(x0.WL0)+8 v(x0.DBL)+6 v(x0.DBL_)+6 v(x0.SAEN)+6 v(x0.BL0)+4 v(x0.BL_0)+4 v(x0.DR0)+2 v(x0.DR_0)+2 v(x0.DW0) v(x0.DW_0) v(Q0)-6 v(x0.WREN)-8
       exit
       .endc
       """.format(step=str(time_step)+time_unit, 

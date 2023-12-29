@@ -168,15 +168,15 @@ def dido_gen(name, not_name, nand2_name):
     circuit.X(4 ,nmos_device,'net6','net5','VSS','VSS',   l='0.15',w='0.42' )
     circuit.X(5 ,pmos_device,'net5','PCHG' ,'VDD','VDD',  l='0.15',w='0.42' )
     circuit.X(6 ,nmos_device,'net5','PCHG' ,'VSS','VSS',  l='0.15',w='0.42' )
-    circuit.X(7 ,pmos_device,'BL_' ,'net3','DR_','VDD',   l='0.15',w='0.42') 
-    circuit.X(8 ,pmos_device,'DR'  ,'net3','BL' ,'VDD',   l='0.15',w='0.42') 
+    circuit.X(7 ,pmos_device,'BL_' ,'net4','DR_','VDD',   l='0.15',w='0.42') 
+    circuit.X(8 ,pmos_device,'DR'  ,'net4','BL' ,'VDD',   l='0.15',w='0.42') 
     circuit.X(9 ,pmos_device,'net4','SEL' ,'VDD','VDD',   l='0.15',w='0.42' )
     circuit.X(10,nmos_device,'BL'  ,'net2','DW' ,'VSS',   l='0.15',w='0.42' )
     circuit.X(11,nmos_device,'DW_' ,'net2','BL_','VSS',   l='0.15',w='0.42' )
     circuit.X(12,nmos_device,'net4','SEL' ,'VSS','VSS',   l='0.15',w='0.42' )
     circuit.X(13,nmos_device,'net3','net4','VSS','VSS',   l='0.15',w='0.42' )
     circuit.X(14,pmos_device,'net3','net4','VDD','VDD',   l='0.15',w='0.42' )
-    circuit.X(15, nand2_name, 'VDD', 'VSS', 'net4', 'WREN', 'net1')
+    circuit.X(15, nand2_name, 'VDD', 'VSS', 'net3', 'WREN', 'net1')
     circuit.X(16, not_name, 'VDD', 'VSS','net1', 'net2')
     return circuit
 

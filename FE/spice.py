@@ -167,17 +167,17 @@ def nand_dec(name, num_words, not_name, dec2to4_name, dec3to6_name, is_col):
     if is_col:
       if num_words == 1:
         # r_dec.X(0,not_name,'VDD','VSS','VDD','DC0')
-        r_dec.X(0,blocks.pmos_device,'DC0','VDD','VDD' ,'VDD',l='0.15',w='2')
-        r_dec.X(1,blocks.nmos_device,'DC0','VDD','VSS' ,'VSS',l='0.15',w='1')
+        r_dec.X(0,blocks.pmos_device,'DC0','VSS','VDD' ,'VDD',l='0.15',w='2')
+        r_dec.X(1,blocks.nmos_device,'DC0','VSS','VSS' ,'VSS',l='0.15',w='1')
         return r_dec
       elif num_words == 2:
         # r_dec.X(0,not_name,'VDD','VSS','A0','DC1')
         # r_dec.X(1,not_name,'VDD','VSS','DC1','DC0')
 
-        r_dec.X(0,blocks.pmos_device,'DC1','A0','VDD' ,'VDD',l='0.15',w='2')
-        r_dec.X(1,blocks.nmos_device,'DC1','A0','VSS' ,'VSS',l='0.15',w='1')
-        r_dec.X(2,blocks.pmos_device,'DC0','DC1','VDD' ,'VDD',l='0.15',w='2')
-        r_dec.X(3,blocks.nmos_device,'DC0','DC1','VSS' ,'VSS',l='0.15',w='1')
+        r_dec.X(0,blocks.pmos_device,'DC0','A0','VDD' ,'VDD',l='0.15',w='2')
+        r_dec.X(1,blocks.nmos_device,'DC0','A0','VSS' ,'VSS',l='0.15',w='1')
+        r_dec.X(2,blocks.pmos_device,'DC1','DC0','VDD' ,'VDD',l='0.15',w='2')
+        r_dec.X(3,blocks.nmos_device,'DC1','DC0','VSS' ,'VSS',l='0.15',w='1')
         return r_dec
         
 
@@ -239,16 +239,14 @@ def nand_dec(name, num_words, not_name, dec2to4_name, dec3to6_name, is_col):
                     in_ports +
                     ' DC_'+str(i)
                     )
-    #invert output
-        if not is_col:
-            for i in range(num_words):
-                r_dec.X(str(Xcnt+1+i+num_words),
-                        not_name,
-                        'VDD'+
-                        ' VSS'+
-                        ' DC_'+str(i)+
-                        ' DC'+str(i)
-                        )
+        for i in range(num_words):
+            r_dec.X(str(Xcnt+1+i+num_words),
+                    not_name,
+                    'VDD'+
+                    ' VSS'+
+                    ' DC_'+str(i)+
+                    ' DC'+str(i)
+                    )
     else:
         for i in range(num_words):
             r_dec.X(str(Xcnt+1+i),
@@ -350,7 +348,10 @@ def gen_spice(mem_words, mem_bits, col_mux):
     circuit.subcircuit(row_driver)
 
     #create col decoder
-    c_dec   = nand_dec('col_dec', col_mux, not_g.name, dec_unit2to4.name, dec_unit3to6.name,  is_col = 1)
+    c_dec       = nand_dec('col_dec', col_mux, not_g.name, dec_unit2to4.name, dec_unit3to6.name,  is_col = 1)
+    col_driver  = row_driver_arr(col_mux,row_driver_cell.name)
+    circuit.subcircuit(col_driver)
+
     circuit.subcircuit(c_dec)
     #dido block (prc, read/write logic)
     dido    = blocks.dido_gen("dido",not_g.name,nand2_g.name)
@@ -404,10 +405,15 @@ def gen_spice(mem_words, mem_bits, col_mux):
     a_ports = ''
     for i in range(math.ceil((col_bits))):
         a_ports += ' A'+str(i) 
+    cd_lines = ''
+    for i in range(col_mux):
+        cd_lines += ' CD'+str(i) 
+    mem_gen.X(3, c_dec.name, 'VDD VSS'+a_ports+cd_lines)
+
     sel_lines = ''
     for i in range(col_mux):
         sel_lines += ' SEL'+str(i) 
-    mem_gen.X(3, c_dec.name, 'VDD VSS'+a_ports+sel_lines)
+    mem_gen.X(4, col_driver.name, 'VDD VSS WLEN'+cd_lines+sel_lines)
     #add dido array
     sel_lines = ''
     for i in range(num_bits):
@@ -418,23 +424,23 @@ def gen_spice(mem_words, mem_bits, col_mux):
         sel_lines += ' DW'+str(int(i/col_mux))+' DW_'+str(int(i/col_mux)) 
     for i in range(num_bits):
         sel_lines += ' DR'+str(int(i/col_mux))+' DR_'+str(int(i/col_mux)) 
-    mem_gen.X(4, dido_arr.name, 'VDD', 'VSS', 'PCHG', 'WREN' + sel_lines)
+    mem_gen.X(5, dido_arr.name, 'VDD', 'VSS', 'PCHG', 'WREN' + sel_lines)
     #add colmux
     #add datain reg
-    mem_gen.X(5, datain_reg_arr.name, datain_reg_arr.external_nodes[0])
+    mem_gen.X(6, datain_reg_arr.name, datain_reg_arr.external_nodes[0])
     #add bit cell matrix
-    mem_gen.X(6, mat_arr.name, mat_arr.external_nodes[0])
+    mem_gen.X(7, mat_arr.name, mat_arr.external_nodes[0])
     #add amp array ToDo
     sb_lines = ''
     for i in range(mem_bits):
         sb_lines += ' DR'+str(i)+' DR_'+str(i) 
     for i in range(mem_bits):
         sb_lines += ' Q'+str(i)
-    mem_gen.X(7, se_arr.name, 'VDD', 'VSS', 'SAEN' + sb_lines)
+    mem_gen.X(8, se_arr.name, 'VDD', 'VSS', 'SAEN' + sb_lines)
     #ctrl
-    mem_gen.X(8, ctrl.name, ctrl.external_nodes[0])
+    mem_gen.X(9, ctrl.name, ctrl.external_nodes[0])
 
-    mem_gen.X(9, dmy_arr.name, dmy_arr.external_nodes[0])
+    mem_gen.X(10, dmy_arr.name, dmy_arr.external_nodes[0])
 
     #linking
     circuit.subcircuit(input_reg_arr)
