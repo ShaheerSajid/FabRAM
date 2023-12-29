@@ -49,11 +49,11 @@ simulation_steps = 2000
 
 models_lib = "/usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice"
 models_corner = "tt"
-sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram128x128.spi"
+sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram128x256.spi"
 
-sram_cell = "sram128x128"
+sram_cell = "sram128x256"
 mem_words = 128
-mem_bits = 128
+mem_bits = 256
 
 addr_bits   = math.log2(mem_words)
 

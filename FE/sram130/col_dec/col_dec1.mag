@@ -1,0 +1,27 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1703654778
+<< metal1 >>
+rect 985 171 995 193
+rect 831 137 995 171
+rect 1051 137 1061 193
+rect 2179 34 2213 530
+rect 2179 0 2289 34
+<< via1 >>
+rect 995 137 1051 193
+<< metal2 >>
+rect 0 422 53 530
+rect 995 400 1051 410
+rect 995 193 1051 344
+rect 995 127 1051 137
+<< via2 >>
+rect 995 344 1051 400
+<< metal3 >>
+rect 985 400 2289 405
+rect 985 344 995 400
+rect 1051 344 2289 400
+rect 985 339 2289 344
+<< labels >>
+rlabel metal1 831 137 865 171 0 SEL0
+<< end >>

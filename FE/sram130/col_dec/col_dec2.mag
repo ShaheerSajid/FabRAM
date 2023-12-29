@@ -1,0 +1,28 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1703655766
+<< metal1 >>
+rect 1079 -525 1089 -503
+rect 831 -559 1089 -525
+rect 1145 -559 1155 -503
+rect 2179 -600 2213 1
+rect 2179 -635 2301 -600
+<< via1 >>
+rect 1089 -559 1145 -503
+<< metal2 >>
+rect 1089 274 1145 284
+rect 1089 -503 1145 218
+rect 1089 -593 1145 -559
+<< via2 >>
+rect 1089 218 1145 274
+<< metal3 >>
+rect 1079 274 2289 279
+rect 1079 218 1089 274
+rect 1145 218 2289 274
+rect 1079 213 2289 218
+use col_dec1  col_dec1_0
+timestamp 1703654778
+transform 1 0 0 0 1 0
+box 0 0 2289 530
+<< end >>
