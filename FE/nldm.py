@@ -2,6 +2,7 @@
 import subprocess
 import random
 import math
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import concurrent.futures
@@ -43,20 +44,30 @@ l_thresh = 0.1
 
 simulation_steps = 2000
 
+if os.name == 'nt':
+  ngspice_path = "c:\\Users\\Shahe\\Downloads\\ngspice-42_64\\Spice64\\bin\\ngspice_con.exe"
+else:
+  ngspice_path = "ngspice"
+
 # 130nm : "/home/shaheer/Documents/pdks/130nm/130MSRFG/PDK/CadenceOA/t013mmsp001k3_1_4c/tsmc13rf_FSG_12v_25v_33v_T-013-MM-SP-001-K3_v1.4c_IC61_20120217/pdk13rf/models/hspice/rf013_v1d3.l"
 # 65nm  : "/home/shaheer/Documents/pdks/65nm/65MSRFGP/PDK/CadenceOA/tn65cmsp018k3_1_0c/pdk/models/hspice/crn65gplus_2d5_lk_v1d0.l"
 # sky130: "/usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice"
-
-models_lib = "/usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice"
+if os.name == 'nt':  
+  models_lib =  "c:\\Users\\Shahe\\Downloads\\skywater-pdk-libs-sky130_fd_pr\\models\\sky130.lib.spice"
+else:
+  models_lib = "/usr/local/share/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice"
 models_corner = "tt"
-sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram256x32.spi"
+
+if os.name == 'nt':
+  sram_netlist = "C:\\Users\\Shahe\\OneDrive\\Desktop\\Projects\\FabRAM\\FE\\out\\sram256x32.spi"
+else:
+  sram_netlist = "/home/shaheer/Desktop/FabRAM/FE/out/sram32x4.spi"
 
 sram_cell = "sram256x32"
 mem_words = 256
 mem_bits = 32
 
 addr_bits   = math.log2(mem_words)
-
 #####################################################
 # create array of input tr times
 #####################################################
@@ -87,8 +98,12 @@ for i in range(table_size):
      simulation_params.append(((i,j), net_tr[i], cap_load[j]))
 #remove files
 try:
-  subprocess.call('rm -rf log', shell=True)
-  subprocess.call('mkdir log', shell=True)
+  if os.name == 'nt':
+    subprocess.call('rmdir /s /q log', shell=True)
+    subprocess.call('mkdir log', shell=True)
+  else:
+    subprocess.call('rm -rf log', shell=True)
+    subprocess.call('mkdir log', shell=True)
 except:
   pass
 ##########################################################
@@ -99,7 +114,10 @@ def run_sim_output_characterizer(simulation_params):
     indexes = simulation_params[0]
     net_tr = simulation_params[1]
     cap_load = simulation_params[2]
-    file_prefix = "log/sim_"+str(net_tr)+"_"+str(cap_load)
+    if os.name == 'nt':
+      file_prefix = "log\sim_"+str(net_tr)+"_"+str(cap_load)
+    else:
+      file_prefix = "log/sim_"+str(net_tr)+"_"+str(cap_load)
     print("Running: "+file_prefix)
     #create simulation template
     sim_circuit = Circuit('characterizer')
@@ -210,7 +228,7 @@ def run_sim_output_characterizer(simulation_params):
       print ("unsupported")
       return
     elif (simulator == "ngspice"):
-      subprocess.call(["ngspice",file_prefix+".spi"])
+      subprocess.call([ngspice_path,file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
       #parse timing
       f = open(file_prefix+".text", "r")
       rise_fall = f.readline().split(" ")
@@ -247,7 +265,10 @@ def run_sim_setup_characterizer(simulation_params):
     indexes = simulation_params[0]
     net_tr_0 = simulation_params[1]
     net_tr_1 = simulation_params[2]
-    file_prefix = "log/sim_"+str(net_tr_0)+"_"+str(net_tr_1)
+    if os.name == 'nt':
+      file_prefix = "log\sim_"+str(net_tr_0)+"_"+str(net_tr_1)
+    else:
+      file_prefix = "log/sim_"+str(net_tr_0)+"_"+str(net_tr_1)
     print("Running: "+file_prefix)
     
     #create pulse input
@@ -331,7 +352,7 @@ def run_sim_setup_characterizer(simulation_params):
           print ("unsupported")
           return
         elif (simulator == "ngspice"):
-          subprocess.call(["ngspice",file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+          subprocess.call([ngspice_path,file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
           #parse timing
           f = open(file_prefix+"_"+str(itr)+".text", "r")
           vals = f.readline().split(",")
@@ -384,7 +405,10 @@ def run_sim_hold_characterizer(simulation_params):
     indexes = simulation_params[0]
     net_tr_0 = simulation_params[1]
     net_tr_1 = simulation_params[2]
-    file_prefix = "log/sim_"+str(net_tr_0)+"_"+str(net_tr_1)
+    if os.name == 'nt':
+      file_prefix = "log\sim_"+str(net_tr_0)+"_"+str(net_tr_1)
+    else:
+      file_prefix = "log/sim_"+str(net_tr_0)+"_"+str(net_tr_1)
     print("Running: "+file_prefix)
     
     #create pulse input
@@ -471,7 +495,7 @@ def run_sim_hold_characterizer(simulation_params):
           return
         elif (simulator == "ngspice"):
           #print("Simulation using Ngspice")
-          subprocess.call(["ngspice",file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+          subprocess.call([ngspice_path,file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
           #parse timing
           f = open(file_prefix+"_"+str(itr)+".text", "r")
           vals = f.readline().split(",")
@@ -520,7 +544,10 @@ def run_sim_hold_characterizer(simulation_params):
 # Leakage Power Characterizer Function
 ##########################################################
 def run_sim_leakage_characterizer():
-  file_prefix = "log/sim_"+str(power["value"])+"_"+str(ground["value"])
+  if os.name == 'nt':
+    file_prefix = "log\sim_"+str(power["value"])+"_"+str(ground["value"])
+  else:
+    file_prefix = "log/sim_"+str(power["value"])+"_"+str(ground["value"])
   print("Running: "+file_prefix)
 
   sim_circuit = Circuit('characterizer')
@@ -585,7 +612,7 @@ def run_sim_leakage_characterizer():
     return
   elif (simulator == "ngspice"):
     #print("Simulation using Ngspice")
-    subprocess.call(["ngspice",file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    subprocess.call([ngspice_path,file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     #get average current
     f = open(file_prefix+".text", "r")
     iavg = float(f.readline())
@@ -599,7 +626,10 @@ def run_sim_leakage_characterizer():
 def run_sim_inputpwr_characterizer(simulation_params, clk=False):
   indexes = simulation_params[0]
   net_tr_0 = simulation_params[1]
-  file_prefix = "log/sim_"+str(net_tr_0)
+  if os.name == 'nt':
+    file_prefix = "log\sim_"+str(net_tr_0)
+  else:
+    file_prefix = "log/sim_"+str(net_tr_0)
   print("Running: "+file_prefix)
 
   #create pulse input
@@ -705,7 +735,7 @@ def run_sim_inputpwr_characterizer(simulation_params, clk=False):
     return
   elif (simulator == "ngspice"):
     #print("Simulation using Ngspice")
-    subprocess.call(["ngspice",file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    subprocess.call([ngspice_path,file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     #get average current
     f = open(file_prefix+".text", "r")
     vals = f.readline().split(",")
@@ -720,7 +750,10 @@ def run_sim_outputpwr_characterizer(simulation_params):
   indexes = simulation_params[0]
   cap_load = simulation_params[1]
   net_tr_0 = 1.0
-  file_prefix = "log/sim_"+str(cap_load)+"_"+str(net_tr_0)
+  if os.name == 'nt':
+    file_prefix = "log\sim_"+str(cap_load)+"_"+str(net_tr_0)
+  else:
+    file_prefix = "log/sim_"+str(cap_load)+"_"+str(net_tr_0)
   print("Running: "+file_prefix)
 
   #create pulse input
@@ -844,7 +877,7 @@ def run_sim_outputpwr_characterizer(simulation_params):
     return
   elif (simulator == "ngspice"):
     #print("Simulation using Ngspice")
-    subprocess.call(["ngspice",file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    subprocess.call([ngspice_path,file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     #get average current
     f = open(file_prefix+".text", "r")
     vals = f.readline().split(",")
@@ -860,7 +893,10 @@ def run_sim_rwpwr_characterizer(simulation_params):
   indexes = simulation_params[0]
   cap_load = simulation_params[1]
   net_tr_0 = 1.0
-  file_prefix = "log/sim_"+str(cap_load)+"_"+str(net_tr_0)
+  if os.name == 'nt':
+    file_prefix = "log\sim_"+str(cap_load)+"_"+str(net_tr_0)
+  else:
+    file_prefix = "log/sim_"+str(cap_load)+"_"+str(net_tr_0)
   print("Running: "+file_prefix)
 
   #create pulse input
@@ -990,7 +1026,7 @@ def run_sim_rwpwr_characterizer(simulation_params):
     return
   elif (simulator == "ngspice"):
     #print("Simulation using Ngspice")
-    subprocess.call(["ngspice",file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    subprocess.call([ngspice_path,file_prefix+".spi"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     #get average current
     f = open(file_prefix+".text", "r")
     write_read = f.readline().split(" ")
@@ -1016,9 +1052,9 @@ out_tr = []
 out_slew = []
 out_tr_fall = []
 out_slew_fall = []
-run_sim_output_characterizer(simulation_params[0])
+# run_sim_output_characterizer(simulation_params[0])
 # print(run_sim_leakage_characterizer())
-exit()
+# exit()
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
     executor.map(run_sim_output_characterizer, simulation_params)
 
