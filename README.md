@@ -11,10 +11,7 @@ FabRAM has been designed to achieve the following objectives:
 - Portability and flexibility across numerous technologies
 - Give user control over implementation of various components in memory to address specific design constraints
 
-
- 
-
-In FabRAM, the designer is required to provide DRC clean cells. FabRAM requires layer width and spacing rules only to perform routing. This way we reduce the information required by the memory compiler from the foundry to simplify the routing algorithm. The routing algorithm does not need to incorporate new rules when switching technologies. This makes it easier to port FabRAM. Moreover, the designer can customize a variety of cells to meet design constraints.
+FabRAM uses a tile based approach where, considering the typical architecture of an SRAM, a user may need to design and develop several components i.e., the bit cell, row driver, row and column decoders, input registers, control, digital-in/digital-out (DIDO), column multiplexer and sense amplifier
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTM0MzkzMTMwLC0zMzI0NTUzNjNdfQ==
+eyJoaXN0b3J5IjpbMTE3NjgwNDkwLC0zMzI0NTUzNjNdfQ==
 -->
